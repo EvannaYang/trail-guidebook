@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trail Difficulty Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f2ece0;
+  --surface:  #ffffff;
+  --surface2: #ede8e0;
+  --border:   rgba(0,0,0,0.08);
+  --border-md:rgba(0,0,0,0.14);
+  --text:     #1a1a1a;
+  --muted:    #6b6b6b;
+  --dim:      #b0a99e;
+
+  --easy-ink:  #2d6a4f;
+  --easy-bg:   #eaf5ef;
+  --easy-line: #52b788;
+
+  --mod-ink:   #7b5800;
+  --mod-bg:    #fdf3dc;
+  --mod-line:  #f4a62a;
+
+  --hard-ink:  #8b1a1a;
+  --hard-bg:   #fdecea;
+  --hard-line: #e05c5c;
+
+  --r: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+.page { max-width: 900px; margin: 0 auto; padding: 40px 20px 64px; }
+
+/* header */
+.page-head { margin-bottom: 32px; }
+.kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+h1 em { font-style: italic; }
+.sub {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+/* mode switcher */
+.mode-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.mode-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-md);
+  background: var(--surface);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.mode-btn:hover { border-color: rgba(0,0,0,0.25); color: var(--text); }
+.mode-btn.active-easy  { background: var(--easy-bg);  color: var(--easy-ink);  border-color: var(--easy-line); }
+.mode-btn.active-mod   { background: var(--mod-bg);   color: var(--mod-ink);   border-color: var(--mod-line); }
+.mode-btn.active-hard  { background: var(--hard-bg);  color: var(--hard-ink);  border-color: var(--hard-line); }
+.dot-easy  { width:8px; height:8px; border-radius:50%; background: var(--easy-line); flex-shrink:0; }
+.dot-mod   { width:8px; height:8px; border-radius:50%; background: var(--mod-line);  flex-shrink:0; }
+.dot-hard  { width:8px; height:8px; border-radius:50%; background: var(--hard-line); flex-shrink:0; }
+
+/* canvas panel */
+.canvas-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px 24px 16px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.panel-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.panel-title {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text);
+}
+.canvas-wrap { position: relative; height: 200px; }
+canvas { width: 100%; height: 100%; display: block; }
+
+/* play/pause button */
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--border-md);
+  background: var(--surface2);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+.play-btn:hover {
+  border-color: rgba(0,0,0,0.25);
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* live data strip */
+.live-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 14px;
+}
+.live-cell {
+  background: var(--surface);
+  padding: 10px 14px;
+  min-height: 68px;
+  transition: background 0.2s;
+}
+.live-cell.pulsing { background: #fffbe6; }
+.live-cell-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.live-cell-loc {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+.live-metrics {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.live-metric-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text);
+  transition: color 0.1s;
+}
+.live-metric-key {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 2px;
+}
+.live-cell-why {
+  font-size: 10px;
+  font-style: italic;
+  color: #b0a99e;
+  margin-top: 4px;
+}
+
+/* comparison table */
+.table-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.table-head {
+  display: grid;
+  grid-template-columns: 120px repeat(3, 1fr);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+}
+.th { font-size: 11px; font-weight: 500; text-align: center; }
+.table-row {
+  display: grid;
+  grid-template-columns: 120px repeat(3, 1fr);
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background 0.12s;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--surface2); }
+.tf {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+.tc {
+  text-align: center;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text);
+}
+.tc.hi { font-weight: 500; }
+.arr { font-size: 10px; opacity: 0.5; margin-left: 2px; }
+
+@media(max-width:600px){
+  .table-head, .table-row { grid-template-columns: 90px repeat(3,1fr); padding: 8px 10px; }
+  .live-strip { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-head">
+    <div class="kicker">Education phase · Trail selection</div>
+    <h1>Same difficulty level,<br><em>different trails</em></h1>
+    <p class="sub">Explore three moderate trails that share the same difficulty rating — but vary in length, elevation, and estimated time.</p>
+  </div>
+
+  <div class="canvas-panel">
+    <div class="panel-row">
+      <div class="panel-title" id="panelTitle">Three moderate trails — same difficulty, different conditions</div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="c"></canvas>
+    </div>
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+    <div class="live-strip" id="liveStrip">
+      <div class="live-cell" id="lc0">
+        <div class="live-cell-name" id="ln0">—</div>
+        <div class="live-cell-loc" id="ll0">—</div>
+        <div class="live-metrics">
+          <div class="live-metric"><div class="live-metric-val" id="lv0-mi">—</div><div class="live-metric-key">mi walked</div></div>
+          <div class="live-metric"><div class="live-metric-val" id="lv0-el">—</div><div class="live-metric-key">ft climbed</div></div>
+          <div class="live-metric"><div class="live-metric-val" id="lv0-tm">—</div><div class="live-metric-key">elapsed</div></div>
+        </div>
+        <div class="live-cell-why" id="lw0"></div>
+      </div>
+      <div class="live-cell" id="lc1">
+        <div class="live-cell-name" id="ln1">—</div>
+        <div class="live-cell-loc" id="ll1">—</div>
+        <div class="live-metrics">
+          <div class="live-metric"><div class="live-metric-val" id="lv1-mi">—</div><div class="live-metric-key">mi walked</div></div>
+          <div class="live-metric"><div class="live-metric-val" id="lv1-el">—</div><div class="live-metric-key">ft climbed</div></div>
+          <div class="live-metric"><div class="live-metric-val" id="lv1-tm">—</div><div class="live-metric-key">elapsed</div></div>
+        </div>
+        <div class="live-cell-why" id="lw1"></div>
+      </div>
+      <div class="live-cell" id="lc2">
+        <div class="live-cell-name" id="ln2">—</div>
+        <div class="live-cell-loc" id="ll2">—</div>
+        <div class="live-metrics">
+          <div class="live-metric"><div class="live-metric-val" id="lv2-mi">—</div><div class="live-metric-key">mi walked</div></div>
+          <div class="live-metric"><div class="live-metric-val" id="lv2-el">—</div><div class="live-metric-key">ft climbed</div></div>
+          <div class="live-metric"><div class="live-metric-val" id="lv2-tm">—</div><div class="live-metric-key">elapsed</div></div>
+        </div>
+        <div class="live-cell-why" id="lw2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-panel" id="tablePanel"></div>
+
+</div>
+
+<script>
+// iframe context: hide header
+if (window.self !== window.top) {
+  document.querySelector('.page').style.paddingTop = '0';
+  document.querySelector('.page-head').style.display = 'none';
+}
+
+const MODES = {
+  easy: {
+    label: 'Three easy trails — same difficulty, different conditions',
+    color: '#52b788', colorInk: '#2d6a4f', colorBg: '#eaf5ef',
+    btnClass: 'active-easy',
+    trails: [
+      { name:'Alberta Falls',   loc:'Rocky Mtn NP · CO', miles:1.60, elev:252,  rating:4.5, speed:2.8, why:'Short & sweet — the easiest waterfall hike in the Rockies' },
+      { name:'Sentinel Dome',   loc:'Yosemite NP · CA',  miles:2.10, elev:456,  rating:5.0, speed:2.5, why:'Flat & wide — huge panoramic payoff for minimal effort' },
+      { name:'Laurel Falls',    loc:'Great Smoky · TN',  miles:2.40, elev:396,  rating:4.0, speed:2.5, why:'Paved path — fully accessible, perfect very first hike' },
+    ]
+  },
+  mod: {
+    label: 'Three moderate trails — same difficulty, different conditions',
+    color: '#f4a62a', colorInk: '#7b5800', colorBg: '#fdf3dc',
+    btnClass: 'active-mod',
+    trails: [
+      { name:'Emerald Lake',    loc:'Rocky Mtn NP · CO', miles:3.10, elev:708,  rating:4.5, speed:2.2, why:'Classic destination — rewarding lake view, well-marked trail' },
+      { name:'Vernal & Nevada', loc:'Yosemite NP · CA',  miles:6.40, elev:2191, rating:5.0, speed:2.0, why:'Famous waterfalls — longer but iconic Yosemite route' },
+      { name:'Delicate Arch',   loc:'Arches NP · UT',    miles:3.10, elev:613,  rating:5.0, speed:2.2, why:'Desert icon — exposed trail but unforgettable payoff' },
+    ]
+  },
+  hard: {
+    label: 'Three hard trails — same difficulty, different conditions',
+    color: '#e05c5c', colorInk: '#8b1a1a', colorBg: '#fdecea',
+    btnClass: 'active-hard',
+    trails: [
+      { name:"Angels Landing",  loc:'Zion NP · UT',      miles:4.10,  elev:1617, rating:5.0, speed:1.6, why:'Chain-assisted summit — vertiginous but legendary views' },
+      { name:'Sky Pond',        loc:'Rocky Mtn NP · CO', miles:8.10,  elev:1765, rating:5.0, speed:1.4, why:'Long mountain journey — remote glacial lake, full-day effort' },
+      { name:'Alum Cave–LeConte',loc:'Great Smoky · TN', miles:10.70, elev:3008, rating:5.0, speed:1.2, why:'Most strenuous — summit lodge hike, triple the vertical of Easy' },
+    ]
+  }
+};
+
+let mode = 'mod';
+let prog = [0,0,0];
+let timeH = 0, playing = false, lastT = null;
+let pulseTimer = [null,null,null];
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+let animDone = false;
+
+function updateBtn() {
+  const btn = document.getElementById('playBtn');
+  if (playing) btn.textContent = '⏸ Pause';
+  else if (animDone) btn.textContent = '▶ Play Again';
+  else btn.textContent = '▶ Resume';
+}
+
+function togglePlay() {
+  if (playing) {
+    playing = false;
+  } else {
+    if (animDone) {
+      timeH = 0;
+      prog = [0, 0, 0];
+      animDone = false;
+    }
+    playing = true;
+    lastT = null;
+  }
+  updateBtn();
+}
+
+// Auto-play after 800ms
+setTimeout(() => {
+  playing = true;
+  lastT = null;
+  updateBtn();
+}, 800);
+
+function currentMode()   { return MODES[mode]; }
+function currentTrails() { return currentMode().trails; }
+function maxHours()      { return Math.max(...currentTrails().map(t => t.miles / t.speed)); }
+
+function resize() {
+  const r = canvas.parentElement.getBoundingClientRect();
+  W = r.width; H = r.height;
+  canvas.width  = Math.round(W * devicePixelRatio);
+  canvas.height = Math.round(H * devicePixelRatio);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+}
+
+const MAX_ELEV_ALL = 3008;
+const PAD_X = 28, PAD_B = 28, PAD_T = 20;
+
+function slopePts(i) {
+  const t = currentTrails()[i];
+  const colW = W / 3;
+  const cx   = colW * i + colW / 2;
+  const sw   = colW * 0.5;
+  const bx   = cx - sw/2, tx = cx + sw/2;
+  const by   = H - PAD_B;
+  const ef   = t.elev / MAX_ELEV_ALL;
+  const ty   = PAD_T + (H - PAD_B - PAD_T) * (1 - Math.max(0.15, ef));
+  return { bx, by, tx, ty, cx };
+}
+
+function hikerPos(i, p) {
+  const s = slopePts(i);
+  return { x: s.bx + (s.tx - s.bx) * p, y: s.by + (s.ty - s.by) * p };
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  const m  = currentMode();
+  const ts = currentTrails();
+  const col = m.color;
+
+  ts.forEach((t, i) => {
+    const s = slopePts(i);
+    const p = Math.min(prog[i], 1);
+    const hx = s.bx + (s.tx - s.bx) * p;
+    const hy = s.by + (s.ty - s.by) * p;
+
+    ctx.save();
+
+    // Trail line (dashed guide)
+    ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 6]);
+    ctx.beginPath(); ctx.moveTo(s.bx, s.by); ctx.lineTo(s.tx, s.ty); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Progress fill
+    if (p > 0.005) {
+      ctx.strokeStyle = col + 'dd';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(s.bx, s.by); ctx.lineTo(hx, hy); ctx.stroke();
+      ctx.fillStyle = col + '18';
+      ctx.beginPath();
+      ctx.moveTo(s.bx, s.by); ctx.lineTo(hx, hy); ctx.lineTo(hx, s.by);
+      ctx.closePath(); ctx.fill();
+    }
+
+    // End points
+    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+    ctx.beginPath(); ctx.arc(s.bx, s.by, 3, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = col + '88';
+    ctx.beginPath(); ctx.arc(s.tx, s.ty, 3, 0, Math.PI*2); ctx.fill();
+
+    // Hiker dot
+    const hr = 9;
+    ctx.beginPath(); ctx.arc(hx, hy, hr, 0, Math.PI*2);
+    ctx.fillStyle = col; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.font = '9px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#fff';
+    ctx.fillText('⛷', hx, hy + 0.5);
+
+    // Trail label & duration
+    ctx.font = '500 10px DM Mono,monospace';
+    ctx.fillStyle = col + '99';
+    ctx.textBaseline = 'alphabetic';
+    const estMin = Math.round(t.miles / t.speed * 60);
+    ctx.fillText(t.miles.toFixed(2) + ' mi · ~' + estMin + ' min', s.cx, s.ty - 9);
+
+    ctx.font = '400 9px DM Mono,monospace';
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillText(t.name, s.cx, s.by + 16);
+
+    ctx.restore();
+  });
+
+  // Time progress bar
+  const frac = Math.min(timeH / maxHours(), 1);
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,0.06)';
+  ctx.roundRect(PAD_X, H - 6, W - PAD_X*2, 3, 1.5); ctx.fill();
+  ctx.fillStyle = col + '88';
+  ctx.roundRect(PAD_X, H - 6, (W - PAD_X*2) * frac, 3, 1.5); ctx.fill();
+  ctx.restore();
+}
+
+function updateLive(pulseIdx) {
+  const ts = currentTrails();
+  ts.forEach((t, i) => {
+    const p = Math.min(prog[i], 1);
+    const walkedMi  = (p * t.miles).toFixed(2);
+    const climbedFt = Math.round(p * t.elev);
+    const elapsedMin = Math.round(p * t.miles / t.speed * 60);
+    const h = Math.floor(elapsedMin / 60);
+    const mMin = elapsedMin % 60;
+    const timeStr = h > 0 ? h + 'h ' + mMin + 'm' : mMin + 'm';
+
+    document.getElementById('ln' + i).textContent = t.name;
+    document.getElementById('ll' + i).textContent = t.loc;
+    document.getElementById('lv' + i + '-mi').textContent = walkedMi;
+    document.getElementById('lv' + i + '-el').textContent = climbedFt.toLocaleString();
+    document.getElementById('lv' + i + '-tm').textContent = timeStr;
+    document.getElementById('lw' + i).textContent = t.why;
+
+    const cell = document.getElementById('lc' + i);
+    if (pulseIdx === i) {
+      cell.classList.add('pulsing');
+      clearTimeout(pulseTimer[i]);
+      pulseTimer[i] = setTimeout(() => cell.classList.remove('pulsing'), 300);
+    }
+  });
+}
+
+function tick(ts) {
+  if (!lastT) lastT = ts;
+  const dt = (ts - lastT) / 1000;
+  lastT = ts;
+
+  if (playing) {
+    timeH += dt * 0.45;
+    if (timeH > maxHours() * 1.05) {
+      // Animation complete — freeze at end, show Play Again
+      timeH = maxHours() * 1.05;
+      playing = false;
+      animDone = true;
+      lastT = null;
+      updateBtn();
+    }
+    currentTrails().forEach((t, i) => { prog[i] = Math.min(timeH / (t.miles / t.speed), 1); });
+  }
+
+  draw();
+  updateLive(-1);
+  requestAnimationFrame(tick);
+}
+
+function buildTable() {
+  const m  = currentMode();
+  const ts = m.trails;
+  const col = m.color;
+  const MAX_MI  = Math.max(...ts.map(t => t.miles));
+  const MAX_EL  = Math.max(...ts.map(t => t.elev));
+  const MAX_RAT = Math.max(...ts.map(t => t.rating));
+  const MAX_TM  = Math.max(...ts.map(t => Math.round(t.miles / t.speed * 60)));
+
+  const rows = [
+    { key:'Length',    vals: ts.map(t => t.miles.toFixed(2) + ' mi'), best: ts.map(t => t.miles === MAX_MI) },
+    { key:'Elev gain', vals: ts.map(t => t.elev.toLocaleString() + ' ft'), best: ts.map(t => t.elev === MAX_EL) },
+    { key:'Est. time', vals: ts.map(t => {
+        const m = Math.round(t.miles / t.speed * 60);
+        return m >= 60 ? Math.floor(m/60) + 'h ' + (m%60) + 'm' : m + 'm';
+      }), best: ts.map(t => Math.round(t.miles / t.speed * 60) === MAX_TM) },
+    { key:'Rating',    vals: ts.map(t => t.rating + ' ★'), best: ts.map(t => t.rating === MAX_RAT) },
+  ];
+
+  let html = `<div class="table-head">
+    <div></div>
+    ${ts.map(t => `<div class="th" style="color:${col}">${t.name}</div>`).join('')}
+  </div>`;
+  rows.forEach(r => {
+    html += `<div class="table-row">
+      <div class="tf">${r.key}</div>
+      ${r.vals.map((v, i) => `<div class="tc ${r.best[i] ? 'hi' : ''}">${v}${r.best[i] ? '<span class="arr">↑</span>' : ''}</div>`).join('')}
+    </div>`;
+  });
+
+  document.getElementById('tablePanel').innerHTML = html;
+}
+
+
+new ResizeObserver(() => resize()).observe(canvas.parentElement);
+resize();
+buildTable();
+updateLive(-1);
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

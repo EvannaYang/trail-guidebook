@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Washington Trails Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg:        #f2ece0;
+    --surface:   #ffffff;
+    --surface2:  #ede6d6;
+    --border:    rgba(0,0,0,0.08);
+    --border-md: rgba(0,0,0,0.14);
+    --text:      #1a1a1a;
+    --muted:     #6b6b6b;
+    --dim:       #b0a99e;
+    --ink:       #2d5a3d;
+    --green:     #52b788;
+    --green-dk:  #2d6a4f;
+    --green-lt:  #eaf5ef;
+    --amber:     #f4a62a;
+    --amber-dk:  #7b5800;
+    --amber-lt:  #fdf3dc;
+    --red:       #e05c5c;
+    --red-dk:    #8b1a1a;
+    --red-lt:    #fdecea;
+    --card-active-border: #52b788;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    flex-shrink: 0;
+    gap: 0;
+  }
+  /* Left: logo mark + wordmark */
+  .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .topbar-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--green);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .topbar-wordmark {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .topbar-wordmark em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+  }
+  /* Center: progress dots */
+  .topbar-dots {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .topbar-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--border-md);
+    flex-shrink: 0;
+    transition: background 0.2s, width 0.2s;
+  }
+  .topbar-dot.active {
+    background: var(--green);
+    width: 22px;
+  }
+  /* Right: chapter label */
+  .topbar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--dim);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* ── Chapter header (second block) ── */
+  .chapter-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    flex-shrink: 0;
+    gap: 16px;
+  }
+  .chapter-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--dim);
+    flex-shrink: 0;
+    width: 24px;
+  }
+  .chapter-title-group {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .chapter-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .chapter-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .chapter-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .chapter-nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-md);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  .chapter-nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .chapter-nav-btn.end {
+    color: var(--dim);
+    border-color: var(--border);
+    background: transparent;
+  }
+
+  /* ── Filter bar ── */
+  .filterbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    z-index: 30;
+  }
+
+  /* Primary row — always visible, centered */
+  .filterbar-main {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    gap: 8px;
+  }
+
+  /* Expandable filter panel */
+  .filter-panel {
+    display: none;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 20px 12px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .filter-panel.open { display: flex; }
+
+  .filterbar-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .filterbar-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* Difficulty pills */
+  .diff-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: opacity 0.18s, background 0.18s, border-color 0.18s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .diff-pill-easy  { background: var(--green-lt); color: var(--green-dk); border-color: var(--green); }
+  .diff-pill-mod   { background: var(--amber-lt); color: var(--amber-dk); border-color: var(--amber); }
+  .diff-pill-hard  { background: var(--red-lt);   color: var(--red-dk);   border-color: var(--red); }
+  .diff-pill.off   { opacity: 0.35; }
+
+  /* Feature tag pills */
+  .feat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-md);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .feat-pill.on {
+    background: var(--green);
+    color: white;
+    border-color: var(--green-dk);
+  }
+
+  /* Compare toggle in filterbar */
+  .compare-toggle {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding: 4px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border-md);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .compare-toggle:hover { border-color: var(--green); color: var(--green-dk); }
+  .compare-toggle.active {
+    background: var(--green-lt);
+    border-color: var(--green);
+    color: var(--green-dk);
+  }
+  .compare-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--green-dk);
+    background: var(--green-lt);
+    border-radius: 999px;
+    padding: 2px 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: none;
+  }
+  .compare-hint.visible { display: inline-block; }
+
+  /* Filter expand button */
+  .filter-toggle {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding: 4px 12px 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-md);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .filter-toggle:hover { border-color: var(--green); color: var(--green-dk); }
+  .filter-toggle.open {
+    background: var(--green-lt);
+    border-color: var(--green);
+    color: var(--green-dk);
+  }
+
+  /* Reset button inside filter panel */
+  .filter-reset {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border-md);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    margin-left: auto;
+    transition: background 0.15s, color 0.15s;
+  }
+  .filter-reset:hover { background: var(--surface2); color: var(--text); }
+
+  /* Trail count */
+  .filterbar-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Search inside filter panel */
+  .filterbar-search {
+    min-width: 160px;
+    max-width: 240px;
+  }
+  .filterbar-search input {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-md);
+    border-radius: 6px;
+    outline: none;
+    padding: 4px 8px;
+  }
+  .filterbar-search input::placeholder { color: var(--dim); }
+  .filterbar-search input:focus { border-color: var(--green); }
+
+  /* Map zoom controls */
+  .map-controls {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 20;
+  }
+  .map-btn {
+    width: 28px;
+    height: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border-md);
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+    user-select: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .map-btn:hover { background: var(--surface2); color: var(--text); }
+
+  /* ── Main split layout ── */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Left panel ── */
+  .left-panel {
+    width: 40%;
+    min-width: 340px;
+    background: var(--bg);
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    scroll-behavior: smooth;
+    position: relative;
+  }
+  .left-panel::-webkit-scrollbar { width: 4px; }
+  .left-panel::-webkit-scrollbar-track { background: transparent; }
+  .left-panel::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 2px; }
+
+  /* 2-column card grid */
+  .cards-list {
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* ── Trail card (portrait) ── */
+  .trail-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    position: relative;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+  }
+  .trail-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-active-border);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.22s ease;
+    border-radius: 3px 0 0 3px;
+    z-index: 2;
+  }
+  .trail-card:hover,
+  .trail-card.highlighted {
+    border-color: var(--card-active-border);
+    transform: translateY(-2px);
+  }
+  .trail-card:hover::before,
+  .trail-card.highlighted::before {
+    transform: scaleY(1);
+  }
+  .trail-card.highlighted {
+    background: #fafff9;
+  }
+  .trail-card.compare-max-flash {
+    border-color: var(--red) !important;
+    transition: border-color 0.1s !important;
+  }
+
+  /* Checkbox for compare mode */
+  .compare-check {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--border-md);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .compare-mode .compare-check { display: flex; }
+  .trail-card.compare-selected .compare-check {
+    background: var(--green);
+    border-color: var(--green-dk);
+  }
+  .trail-card.compare-selected {
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 2px var(--green-lt) !important;
+  }
+
+  .card-photo {
+    height: 140px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .card-body {
+    padding: 10px 12px 14px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-diff-region {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .card-region {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .card-name {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  /* Stats grid 2x2 */
+  .card-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 8px;
+    margin-bottom: 8px;
+  }
+  .stat-item { display: flex; flex-direction: column; }
+  .stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  .diff-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .diff-1 { background: var(--green-lt); color: var(--green-dk); }
+  .diff-3 { background: var(--amber-lt); color: var(--amber-dk); }
+  .diff-5 { background: var(--red-lt);   color: var(--red-dk); }
+  .diff-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .diff-1 .diff-dot { background: var(--green); }
+  .diff-3 .diff-dot { background: var(--amber); }
+  .diff-5 .diff-dot { background: var(--red); }
+
+  .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: 6px; }
+  .tag {
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* ── Right panel / map ── */
+  .right-panel {
+    flex: 1;
+    position: relative;
+    background: #f2ece0;
+    overflow: hidden;
+  }
+
+  #waCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: default;
+  }
+
+  /* ── Map tooltip ── */
+  .map-tooltip {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border-md);
+    border-radius: 8px;
+    padding: 8px 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    z-index: 100;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    min-width: 150px;
+  }
+  .map-tooltip.visible { opacity: 1; }
+  .tt-name {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .tt-region {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+  }
+
+  /* ── Map legend ── */
+  .map-legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    z-index: 20;
+  }
+  .legend-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .legend-row:last-child { margin-bottom: 0; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  .map-caption {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: rgba(0,0,0,0.3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Compare overlay ── */
+  .compare-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .compare-overlay.open { display: flex; }
+  .compare-modal {
+    background: var(--surface);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 860px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  }
+  .compare-modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 5;
+    border-radius: 16px 16px 0 0;
+  }
+  .compare-modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .compare-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border-md);
+    background: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    color: var(--muted);
+    transition: background 0.15s;
+  }
+  .compare-close:hover { background: var(--surface2); }
+  .compare-cols {
+    display: flex;
+    padding: 20px 24px 24px;
+    gap: 16px;
+    min-height: 200px;
+  }
+  .compare-col {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .compare-col-photo {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+  }
+  .compare-col-body { padding: 14px; }
+  .compare-col-region {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 3px;
+  }
+  .compare-col-name {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .compare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row-key { color: var(--dim); }
+  .compare-row-val { color: var(--text); font-weight: 500; }
+  .compare-col-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <!-- Left: brand -->
+  <div class="topbar-brand">
+    <div class="topbar-icon">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 2L12.5 11.5H1.5L7 2Z" fill="white"/>
+      </svg>
+    </div>
+    <span class="topbar-wordmark">Trail <em>Guide</em></span>
+  </div>
+  <!-- Center: chapter progress dots -->
+  <div class="topbar-dots">
+    <div class="topbar-dot"></div>
+    <div class="topbar-dot"></div>
+    <div class="topbar-dot"></div>
+    <div class="topbar-dot"></div>
+    <div class="topbar-dot"></div>
+    <div class="topbar-dot active"></div>
+  </div>
+  <!-- Right: chapter label -->
+  <span class="topbar-label">CH 05 · Pick your trail</span>
+</div>
+
+<!-- Chapter header -->
+<div class="chapter-header">
+  <span class="chapter-num">05</span>
+  <div class="chapter-title-group">
+    <span class="chapter-title">Pick your Washington trail</span>
+    <span class="chapter-desc">· 2-col card browse + interactive map — select trails to compare side by side</span>
+  </div>
+  <div class="chapter-nav">
+    <button class="chapter-nav-btn">← Back</button>
+    <button class="chapter-nav-btn end">End of Guide</button>
+  </div>
+</div>
+
+<!-- Filter bar -->
+<div class="filterbar" id="filterbar">
+  <!-- Primary row: difficulty + filter button + compare, centered -->
+  <div class="filterbar-main">
+    <div class="filterbar-section">
+      <button class="diff-pill diff-pill-easy" id="pill-1" onclick="toggleDiff(1)">Easy</button>
+      <button class="diff-pill diff-pill-mod"  id="pill-3" onclick="toggleDiff(3)">Moderate</button>
+      <button class="diff-pill diff-pill-hard" id="pill-5" onclick="toggleDiff(5)">Hard</button>
+    </div>
+    <div class="filterbar-divider"></div>
+    <button class="filter-toggle" id="filterToggle" onclick="toggleFilterPanel()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0"><line x1="2" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="5" cy="4" r="1.5" fill="currentColor"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="8" r="1.5" fill="currentColor"/><line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="12" r="1.5" fill="currentColor"/></svg>Filter</button>
+    <button class="compare-toggle" id="compareToggle" onclick="onCompareToggleClick()">&#x21C4; Compare</button>
+    <span class="compare-hint" id="compareHint">Select up to 3</span>
+    <div class="filterbar-divider"></div>
+    <span class="filterbar-count" id="trailCount">19 trails</span>
+  </div>
+
+  <!-- Expandable filter panel: scenery/facilities tags + search + reset -->
+  <div class="filter-panel" id="filterPanel">
+    <div id="featurePills" style="display:flex;gap:5px;flex-wrap:wrap;">
+      <button class="feat-pill" data-feat="Views"       onclick="toggleFeat(this,'Views')">🏔 Views</button>
+      <button class="feat-pill" data-feat="Waterfall"   onclick="toggleFeat(this,'Waterfall')">💧 Waterfall</button>
+      <button class="feat-pill" data-feat="River"       onclick="toggleFeat(this,'River')">🌊 River</button>
+      <button class="feat-pill" data-feat="Forest"      onclick="toggleFeat(this,'Forest')">🌲 Forest</button>
+      <button class="feat-pill" data-feat="Lake"        onclick="toggleFeat(this,'Lake')">🏞 Lake</button>
+      <button class="feat-pill" data-feat="Kids"        onclick="toggleFeat(this,'Kids')">👨‍👩‍👧 Kids</button>
+      <button class="feat-pill" data-feat="Beach"       onclick="toggleFeat(this,'Beach')">🏖 Beach</button>
+      <button class="feat-pill" data-feat="Wildlife"    onclick="toggleFeat(this,'Wildlife')">🦌 Wildlife</button>
+      <button class="feat-pill" data-feat="Wildflowers" onclick="toggleFeat(this,'Wildflowers')">🌸 Wildflowers</button>
+    </div>
+    <div class="filterbar-search">
+      <input type="text" id="searchInput" placeholder="Search by name or park…" oninput="onSearch(this.value)">
+    </div>
+    <button class="filter-reset" onclick="resetFilters()">Reset</button>
+  </div>
+</div>
+
+<!-- Main split -->
+<div class="main">
+
+  <!-- Left: card list -->
+  <div class="left-panel" id="leftPanel">
+    <div class="cards-list" id="cardsList"></div>
+  </div>
+
+  <!-- Right: map -->
+  <div class="right-panel" id="rightPanel">
+    <canvas id="waCanvas"></canvas>
+
+    <!-- Zoom controls -->
+    <div class="map-controls">
+      <button class="map-btn" onclick="zoomMap(1.25)" title="Zoom in">+</button>
+      <button class="map-btn" onclick="zoomMap(0.8)"  title="Zoom out">−</button>
+      <button class="map-btn" onclick="resetZoom()"   title="Reset view" style="font-size:11px;">⌂</button>
+    </div>
+
+    <!-- Hover tooltip -->
+    <div class="map-tooltip" id="mapTooltip">
+      <div class="tt-name" id="ttName"></div>
+      <div class="tt-region" id="ttRegion"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-title">Difficulty</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#52b788;"></div>Easy</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#f4a62a;"></div>Moderate</div>
+      <div class="legend-row"><div class="legend-dot" style="background:#e05c5c;"></div>Hard</div>
+    </div>
+
+    <div class="map-caption">Washington State · National Parks &amp; Wilderness</div>
+  </div>
+</div>
+
+<!-- Compare overlay -->
+<div class="compare-overlay" id="compareOverlay" onclick="closeOverlayOnBg(event)">
+  <div class="compare-modal" id="compareModal">
+    <div class="compare-modal-header">
+      <div class="compare-modal-title">Trail Comparison</div>
+      <button class="compare-close" onclick="closeCompareOverlay()">&#x2715;</button>
+    </div>
+    <div class="compare-cols" id="compareCols"></div>
+  </div>
+</div>
+
+<script>
+// ── Trail data ────────────────────────────────────────────────────────────────
+const TRAILS_ALL = [
+  { id:0,  name:'Tolmie Peak Trail',               region:'Mount Rainier NP', diff:3, miles:5.5,  elev:1522, rating:4.5, reviews:856,  lat:46.9374, lon:-121.8677, route:'out and back', tags:['Lake','Views','Wildflowers','Forest'],   img:'WA%20trails%20image/Tolmie%20Peak%20Trail.jpeg' },
+  { id:1,  name:'Skyline Trail',                   region:'Mount Rainier NP', diff:3, miles:5.3,  elev:1758, rating:5.0, reviews:1124, lat:46.7865, lon:-121.7364, route:'loop',         tags:['Views','Forest','Wildflowers'],          img:'WA%20trails%20image/Skyline%20Trail.jpeg' },
+  { id:2,  name:'Hurricane Hill',                  region:'Olympic NP',       diff:3, miles:3.1,  elev:797,  rating:4.5, reviews:634,  lat:47.9765, lon:-123.5178, route:'out and back', tags:['Views','Wildlife','Wildflowers'],         img:'WA%20trails%20image/Hurricane%20Hill.jpeg' },
+  { id:3,  name:'Mount Storm King',                region:'Olympic NP',       diff:5, miles:3.9,  elev:2096, rating:5.0, reviews:510,  lat:48.058,  lon:-123.812, route:'out and back', tags:['Lake','Views','Forest'],                 img:'WA%20trails%20image/Mount%20Storm%20King.jpeg' },
+  { id:4,  name:'Sol Duc Falls Nature Trail',      region:'Olympic NP',       diff:1, miles:1.6,  elev:255,  rating:4.5, reviews:721,  lat:47.955,  lon:-124.005, route:'out and back', tags:['Waterfall','Forest','Kids'],             img:'WA%20trails%20image/Sol%20Duc%20Falls%20Nature%20Trail.jpeg' },
+  { id:5,  name:'Hoh Rain Forest Hall of Moss',    region:'Olympic NP',       diff:1, miles:1.0,  elev:78,   rating:4.5, reviews:498,  lat:47.862,  lon:-123.934, route:'loop',         tags:['Forest','Kids','Wildlife'],              img:'WA%20trails%20image/Hoh%20Rain%20Forest%20Hall%20of%20Moss.jpeg' },
+  { id:6,  name:'Marymere Falls Trail',            region:'Olympic NP',       diff:1, miles:1.7,  elev:298,  rating:4.5, reviews:562,  lat:48.064,  lon:-123.772, route:'out and back', tags:['Waterfall','Lake','Kids','Forest'],       img:'WA%20trails%20image/Marymere%20Falls%20Trail.jpg' },
+  { id:7,  name:'Comet & Christine Falls',         region:'Mount Rainier NP', diff:3, miles:4.3,  elev:2004, rating:4.5, reviews:445,  lat:46.7787, lon:-121.7839, route:'out and back', tags:['Waterfall','River','Views','Forest'],     img:'WA%20trails%20image/Comet%20%26%20Christine%20Falls.jpeg' },
+  { id:9,  name:'Burroughs Mountain Loop',         region:'Mount Rainier NP', diff:3, miles:9.4,  elev:2562, rating:5.0, reviews:612,  lat:46.9142, lon:-121.6418, route:'loop',         tags:['Views','Wildflowers','Wildlife'],        img:'WA%20trails%20image/Burroughs%20Mountain%20Loop.JPG' },
+  { id:10, name:'Naches Peak Loop',                region:'Mount Rainier NP', diff:1, miles:3.3,  elev:636,  rating:4.5, reviews:734,  lat:46.8698, lon:-121.5195, route:'loop',         tags:['Lake','Views','Kids','Wildflowers'],      img:'WA%20trails%20image/Naches%20Peak%20Loop.jpeg' },
+  { id:11, name:'Spray Park to Mount Pleasant',    region:'Mount Rainier NP', diff:3, miles:6.9,  elev:2086, rating:4.5, reviews:398,  lat:46.9327, lon:-121.8634, route:'out and back', tags:['Wildflowers','Views','Forest'],          img:'WA%20trails%20image/Spray%20Park%20to%20Mount%20Pleasant.jpg' },
+  { id:12, name:'High Divide – Seven Lakes Loop',  region:'Olympic NP',       diff:5, miles:19.0, elev:5308, rating:5.0, reviews:478,  lat:47.973,  lon:-123.765, route:'loop',         tags:['Lake','Views','Wildlife','River'],        img:'WA%20trails%20image/High%20Divide%20%E2%80%93%20Seven%20Lakes%20Loop.jpeg' },
+  { id:13, name:'Mount Fremont Lookout',           region:'Mount Rainier NP', diff:3, miles:5.6,  elev:1145, rating:5.0, reviews:523,  lat:46.9143, lon:-121.6423, route:'out and back', tags:['Views','Wildflowers','Wildlife'],         img:'WA%20trails%20image/Mount%20Fremont%20Lookout.jpeg' },
+  { id:14, name:'Blue Lake Trail',                 region:'North Cascades NP',diff:3, miles:5.3,  elev:958,  rating:4.5, reviews:412,  lat:48.5194, lon:-120.6742, route:'out and back', tags:['Lake','Forest','Views'],                  img:'WA%20trails%20image/Blue%20Lake%20Trail.jpeg' },
+  { id:15, name:'Ruby Beach',                      region:'Olympic NP',       diff:1, miles:1.4,  elev:68,   rating:4.5, reviews:589,  lat:47.7097, lon:-124.4134, route:'out and back', tags:['Beach','Views','Wildlife','Wildflowers'], img:'WA%20trails%20image/Ruby%20Beach.jpg' },
+  { id:16, name:'Staircase Rapids Loop',           region:'Olympic NP',       diff:1, miles:2.1,  elev:213,  rating:4.5, reviews:378,  lat:47.5155, lon:-123.3301, route:'loop',         tags:['River','Lake','Kids','Forest'],           img:'WA%20trails%20image/Staircase%20Rapids%20Loop.jpeg' },
+  { id:17, name:'Cascade Pass & Sahale Arm',       region:'North Cascades NP',diff:5, miles:10.9, elev:3858, rating:5.0, reviews:456,  lat:48.4754, lon:-121.0750, route:'out and back', tags:['Views','Wildflowers','Wildlife'],         img:'WA%20trails%20image/Cascade%20Pass%20%26%20Sahale%20Arm.jpeg' },
+  { id:18, name:'Pinnacle Peak Saddle',            region:'Mount Rainier NP', diff:3, miles:2.4,  elev:1056, rating:4.5, reviews:334,  lat:46.7683, lon:-121.7311, route:'out and back', tags:['Views','Wildflowers','Forest'],           img:'WA%20trails%20image/Pinnacle%20Peak%20Saddle.JPG' },
+  { id:19, name:'Hoh River Trail',                 region:'Olympic NP',       diff:3, miles:32.8, elev:5114, rating:4.5, reviews:289,  lat:47.842,  lon:-123.763, route:'out and back', tags:['Forest','River','Wildlife'],              img:'WA%20trails%20image/Hoh%20River%20Trail.jpg' },
+];
+
+const TRAILS = TRAILS_ALL.filter(t => t.diff !== 7);
+
+// ── Difficulty helpers ─────────────────────────────────────────────────────────
+const DIFF = {
+  1: { label:'Easy',     col:'#52b788', ink:'#2d6a4f', bg:'#eaf5ef' },
+  3: { label:'Moderate', col:'#f4a62a', ink:'#7b5800', bg:'#fdf3dc' },
+  5: { label:'Hard',     col:'#e05c5c', ink:'#8b1a1a', bg:'#fdecea' },
+};
+
+function diffCfg(d) { return DIFF[d] || DIFF[5]; }
+
+function stars(r) {
+  const f = Math.floor(r), h = r - f >= 0.5 ? 1 : 0;
+  return '★'.repeat(f) + (h?'½':'') + '☆'.repeat(5-f-h);
+}
+
+function estTime(miles, elev) {
+  const hrs = miles / 3 + elev / 2000;
+  const h = Math.floor(hrs);
+  const m = Math.round((hrs - h) * 60 / 15) * 15;
+  if (m === 0) return h + 'h';
+  if (m === 60) return (h+1) + 'h';
+  return h + 'h ' + m + 'm';
+}
+
+// ── Filter state ──────────────────────────────────────────────────────────────
+const activeDiffs    = new Set([1, 3, 5]); // all on by default
+const activeFeatures = new Set();           // none active = no feature filter
+let searchQuery      = '';
+let visibleTrailIds  = new Set(TRAILS.map(t => t.id));
+
+function applyFilters() {
+  visibleTrailIds.clear();
+  TRAILS.forEach(t => {
+    if (!activeDiffs.has(t.diff)) return;
+    for (const feat of activeFeatures) {
+      if (!t.tags.some(tag => tag.toLowerCase() === feat.toLowerCase())) return;
+    }
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      if (!t.name.toLowerCase().includes(q) && !t.region.toLowerCase().includes(q)) return;
+    }
+    visibleTrailIds.add(t.id);
+  });
+
+  TRAILS.forEach(t => {
+    const card = document.getElementById('card-' + t.id);
+    if (card) card.style.display = visibleTrailIds.has(t.id) ? '' : 'none';
+  });
+
+  document.getElementById('trailCount').textContent = visibleTrailIds.size + ' trails';
+  drawMap();
+}
+
+function toggleDiff(d) {
+  if (activeDiffs.has(d)) {
+    activeDiffs.delete(d);
+    document.getElementById('pill-' + d).classList.add('off');
+  } else {
+    activeDiffs.add(d);
+    document.getElementById('pill-' + d).classList.remove('off');
+  }
+  applyFilters();
+}
+
+function toggleFeat(btn, feat) {
+  if (activeFeatures.has(feat)) {
+    activeFeatures.delete(feat);
+    btn.classList.remove('on');
+  } else {
+    activeFeatures.add(feat);
+    btn.classList.add('on');
+  }
+  applyFilters();
+}
+
+function onSearch(val) {
+  searchQuery = val.trim();
+  applyFilters();
+}
+
+const FILTER_ICON_SVG = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0"><line x1="2" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="5" cy="4" r="1.5" fill="currentColor"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="8" r="1.5" fill="currentColor"/><line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7" cy="12" r="1.5" fill="currentColor"/></svg>';
+
+function toggleFilterPanel() {
+  const panel  = document.getElementById('filterPanel');
+  const toggle = document.getElementById('filterToggle');
+  const isOpen = panel.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  toggle.innerHTML = isOpen ? '✕ Filter' : FILTER_ICON_SVG + 'Filter';
+}
+
+function resetFilters() {
+  // Reset difficulty (all on)
+  [1,3,5].forEach(d => {
+    activeDiffs.add(d);
+    document.getElementById('pill-' + d).classList.remove('off');
+  });
+  // Reset features
+  activeFeatures.clear();
+  document.querySelectorAll('#featurePills .feat-pill').forEach(btn => btn.classList.remove('on'));
+  // Reset search
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  applyFilters();
+}
+
+// ── Compare state ─────────────────────────────────────────────────────────────
+let compareMode     = false;
+let compareSelected = new Set();
+
+// Single unified handler for the Compare button
+function onCompareToggleClick() {
+  // If already in compare mode AND 2+ trails selected → open the overlay
+  if (compareMode && compareSelected.size >= 2) {
+    openCompareOverlay();
+    return;
+  }
+  // Otherwise: toggle compare mode on/off
+  toggleCompareMode();
+}
+
+function toggleCompareMode() {
+  compareMode = !compareMode;
+  const btn   = document.getElementById('compareToggle');
+  const hint  = document.getElementById('compareHint');
+  const leftPanel = document.getElementById('leftPanel');
+  btn.classList.toggle('active', compareMode);
+  btn.textContent = compareMode ? '✕ Done' : '⇄ Compare';
+  leftPanel.classList.toggle('compare-mode', compareMode);
+  hint.classList.toggle('visible', compareMode);
+  if (!compareMode) {
+    compareSelected.clear();
+    updateCompareToggleText();
+    document.querySelectorAll('.trail-card.compare-selected').forEach(c => {
+      c.classList.remove('compare-selected');
+      c.querySelector('.compare-check').textContent = '';
+    });
+  }
+}
+
+function toggleTrailCompare(id) {
+  const card = document.getElementById('card-' + id);
+  if (compareSelected.has(id)) {
+    compareSelected.delete(id);
+    card.classList.remove('compare-selected');
+    card.querySelector('.compare-check').textContent = '';
+  } else {
+    if (compareSelected.size >= 3) {
+      // Flash red
+      card.classList.add('compare-max-flash');
+      setTimeout(() => card.classList.remove('compare-max-flash'), 600);
+      return;
+    }
+    compareSelected.add(id);
+    card.classList.add('compare-selected');
+    card.querySelector('.compare-check').textContent = '✓';
+  }
+  updateCompareToggleText();
+}
+
+function updateCompareToggleText() {
+  const btn  = document.getElementById('compareToggle');
+  const hint = document.getElementById('compareHint');
+  const n    = compareSelected.size;
+  if (compareMode) {
+    if (n >= 2) {
+      // Prompt user to tap to open the comparison overlay
+      btn.textContent = '↗ View Comparison (' + n + ')';
+    } else {
+      btn.textContent = '✕ Done';
+    }
+    hint.textContent = n >= 3 ? '3/3 selected' : 'Select up to 3';
+  }
+}
+
+function openCompareOverlay() {
+  if (!compareMode || compareSelected.size < 2) return;
+  const cols = document.getElementById('compareCols');
+  cols.innerHTML = '';
+  const ids = Array.from(compareSelected);
+  ids.forEach(id => {
+    const t = TRAILS.find(x => x.id === id);
+    if (!t) return;
+    const cfg = diffCfg(t.diff);
+    const col = document.createElement('div');
+    col.className = 'compare-col';
+    col.innerHTML = `
+      <img class="compare-col-photo" src="${t.img}" alt="${t.name}"
+           onerror="this.style.display='none'">
+      <div class="compare-col-body">
+        <div class="compare-col-region">${t.region}</div>
+        <div class="compare-col-name">${t.name}</div>
+        <div style="margin-bottom:10px;">
+          <span class="diff-badge diff-${t.diff}">
+            <span class="diff-dot"></span>${cfg.label}
+          </span>
+        </div>
+        <div class="compare-row"><span class="compare-row-key">Distance</span><span class="compare-row-val">${t.miles.toFixed(1)} mi</span></div>
+        <div class="compare-row"><span class="compare-row-key">Elevation</span><span class="compare-row-val">${t.elev.toLocaleString()} ft</span></div>
+        <div class="compare-row"><span class="compare-row-key">Est. time</span><span class="compare-row-val">${estTime(t.miles, t.elev)}</span></div>
+        <div class="compare-row"><span class="compare-row-key">Route</span><span class="compare-row-val">${t.route}</span></div>
+        <div class="compare-row"><span class="compare-row-key">Rating</span><span class="compare-row-val" style="color:${cfg.col}">${t.rating} ★ (${t.reviews})</span></div>
+        <div class="compare-col-tags">${t.tags.map(tag=>`<div class="tag">${tag}</div>`).join('')}</div>
+      </div>`;
+    cols.appendChild(col);
+  });
+  document.getElementById('compareOverlay').classList.add('open');
+}
+
+function closeCompareOverlay() {
+  document.getElementById('compareOverlay').classList.remove('open');
+}
+
+function closeOverlayOnBg(e) {
+  if (e.target === document.getElementById('compareOverlay')) closeCompareOverlay();
+}
+
+// ── Build left panel cards ─────────────────────────────────────────────────────
+const cardsList = document.getElementById('cardsList');
+
+TRAILS.forEach(t => {
+  const cfg  = diffCfg(t.diff);
+  const card = document.createElement('div');
+  card.className = 'trail-card';
+  card.id = 'card-' + t.id;
+  card.style.setProperty('--card-active-border', cfg.col);
+
+  card.innerHTML = `
+    <div class="compare-check" onclick="event.stopPropagation(); toggleTrailCompare(${t.id})"></div>
+    <img class="card-photo" src="${t.img}" alt="${t.name}" onerror="this.style.display='none'">
+    <div class="card-body">
+      <div class="card-diff-region">
+        <div class="diff-badge diff-${t.diff}">
+          <div class="diff-dot"></div>${cfg.label}
+        </div>
+        <div class="card-region">${t.region.replace(' NP','')}</div>
+      </div>
+      <div class="card-name">${t.name}</div>
+      <div class="card-stats">
+        <div class="stat-item">
+          <div class="stat-val">${t.miles.toFixed(1)} mi</div>
+          <div class="stat-key">Distance</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">${t.elev.toLocaleString()} ft</div>
+          <div class="stat-key">Elev gain</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">${estTime(t.miles, t.elev)}</div>
+          <div class="stat-key">Est. time</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val" style="color:${cfg.col};">${t.rating} ★</div>
+          <div class="stat-key">Rating</div>
+        </div>
+      </div>
+      <div class="card-tags">
+        ${t.tags.map(tag=>`<div class="tag">${tag}</div>`).join('')}
+      </div>
+    </div>`;
+
+  card.addEventListener('click', () => {
+    if (compareMode) { toggleTrailCompare(t.id); return; }
+  });
+  card.addEventListener('mouseenter', () => activateFromCard(t.id));
+  card.addEventListener('mouseleave', () => deactivate());
+
+  // Wire compare button click to open overlay when >=2
+  card.addEventListener('click', e => {
+    if (!compareMode) return;
+    // handled by toggleTrailCompare above — but also open overlay if compare-toggle was clicked
+  });
+
+  cardsList.appendChild(card);
+});
+
+// Compare navigation is handled by onCompareToggleClick() unified handler (on the button).
+
+// ── Washington State SVG path ──────────────────────────────────────────────────
+const WA_BOUNDS = { latMin:45.54, latMax:49.00, lonMin:-124.73, lonMax:-116.92 };
+
+const WA_OUTLINE_LATLON = [
+  [48.999,-124.72],[48.999,-124.00],[49.001,-123.30],[49.000,-122.80],
+  [49.000,-122.00],[49.000,-121.20],[49.000,-120.50],[49.000,-119.50],
+  [49.000,-118.80],[49.000,-118.20],[49.001,-117.44],[49.000,-117.03],
+  [47.950,-116.92],[46.540,-116.92],
+  [46.540,-117.06],[46.430,-117.23],[46.380,-117.44],[46.200,-117.08],
+  [46.054,-118.99],
+  [45.935,-119.60],[45.735,-120.19],[45.644,-120.90],[45.773,-121.50],
+  [45.700,-121.87],[45.640,-122.10],[45.640,-122.40],[45.620,-122.76],
+  [45.554,-122.76],
+  [46.230,-124.07],[46.495,-124.07],[46.740,-124.04],[47.300,-124.38],
+  [47.720,-124.45],[47.950,-124.72],[48.160,-124.72],
+  [48.280,-124.65],[48.380,-124.20],[48.450,-123.60],[48.540,-123.02],
+  [47.900,-122.90],[47.700,-122.70],[47.530,-122.42],[47.250,-122.35],
+  [47.380,-122.15],[47.510,-122.06],[47.690,-122.23],[47.850,-122.25],
+  [48.080,-122.20],[48.285,-122.35],[48.450,-122.48],[48.600,-122.62],
+  [48.760,-122.50],[48.999,-122.80],
+];
+
+// ── Canvas setup & projection ─────────────────────────────────────────────────
+const canvas   = document.getElementById('waCanvas');
+const ctx      = canvas.getContext('2d');
+const tooltip  = document.getElementById('mapTooltip');
+const ttName   = document.getElementById('ttName');
+const ttRegion = document.getElementById('ttRegion');
+const rightPanel = document.getElementById('rightPanel');
+
+let W, H, dotPositions = [];
+let hoveredId = null;
+let activeId  = null;
+
+// ── Zoom / pan state ──────────────────────────────────────────────────────────
+let mapScale = 1, mapPanX = 0, mapPanY = 0;
+let isDragging = false, dragLast = null;
+
+function project(lat, lon, w, h) {
+  const pad = { t:40, b:54, l:50, r:40 };
+  const fw = w - pad.l - pad.r;
+  const fh = h - pad.t - pad.b;
+  const bx = pad.l + (lon - WA_BOUNDS.lonMin) / (WA_BOUNDS.lonMax - WA_BOUNDS.lonMin) * fw;
+  const by = pad.t + (1 - (lat - WA_BOUNDS.latMin) / (WA_BOUNDS.latMax - WA_BOUNDS.latMin)) * fh;
+  // Apply zoom (centered on canvas center) + pan
+  const cx = w / 2, cy = h / 2;
+  const x = cx + (bx - cx) * mapScale + mapPanX;
+  const y = cy + (by - cy) * mapScale + mapPanY;
+  return [x, y];
+}
+
+function recalcDots() {
+  dotPositions = TRAILS.map(t => {
+    const [x, y] = project(t.lat, t.lon, W, H);
+    return { id: t.id, x, y };
+  });
+}
+
+function zoomMap(factor, mx, my) {
+  mx = (mx !== undefined) ? mx : W / 2;
+  my = (my !== undefined) ? my : H / 2;
+  const newScale = Math.max(0.6, Math.min(6, mapScale * factor));
+  const cx = W / 2, cy = H / 2;
+  // Adjust pan so the point under cursor stays fixed
+  const bxFromCenter = (mx - cx - mapPanX) / mapScale;
+  const byFromCenter = (my - cy - mapPanY) / mapScale;
+  mapPanX += bxFromCenter * (mapScale - newScale);
+  mapPanY += byFromCenter * (mapScale - newScale);
+  mapScale = newScale;
+  recalcDots();
+  drawMap();
+}
+
+function resetZoom() {
+  mapScale = 1; mapPanX = 0; mapPanY = 0;
+  recalcDots();
+  drawMap();
+}
+
+function resize() {
+  const rect = rightPanel.getBoundingClientRect();
+  W = rect.width; H = rect.height;
+  canvas.width  = Math.round(W * devicePixelRatio);
+  canvas.height = Math.round(H * devicePixelRatio);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  recalcDots();
+  drawMap();
+}
+
+// ── Topographic helpers ───────────────────────────────────────────────────────
+function drawMountainGlow(cx, cy, rx, ry, intensity) {
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rx, ry));
+  grad.addColorStop(0, `rgba(0,0,0,${intensity})`);
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.save();
+  ctx.scale(1, ry / rx);
+  ctx.beginPath();
+  ctx.ellipse(cx, cy * rx / ry, rx, rx, 0, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.restore();
+}
+
+// ── Draw ──────────────────────────────────────────────────────────────────────
+function drawMap() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background — paper
+  ctx.fillStyle = '#f2ece0';
+  ctx.fillRect(0, 0, W, H);
+
+  // WA state fill
+  ctx.beginPath();
+  WA_OUTLINE_LATLON.forEach(([lat,lon], i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = '#f5f3ef';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+  ctx.lineWidth   = 1.2;
+  ctx.setLineDash([]);
+  ctx.stroke();
+
+  // ── 4a: Mountain elevation shading ───────────────────────────────────────
+  {
+    const [ox, oy] = project(47.85, -123.45, W, H);
+    drawMountainGlow(ox, oy, 55, 40, 0.06);
+  }
+  {
+    const [rx, ry] = project(46.85, -121.73, W, H);
+    drawMountainGlow(rx, ry, 35, 30, 0.07);
+  }
+  {
+    const [nx, ny] = project(48.5, -120.8, W, H);
+    drawMountainGlow(nx, ny, 45, 60, 0.05);
+  }
+  {
+    const [cx, cy] = project(47.5, -121.4, W, H);
+    drawMountainGlow(cx, cy, 30, 50, 0.05);
+  }
+
+  // ── 4b: Cascade spine line ────────────────────────────────────────────────
+  ctx.save();
+  ctx.strokeStyle = 'rgba(0,0,0,0.09)';
+  ctx.lineWidth   = 1.5;
+  ctx.setLineDash([2, 5]);
+  const spinePoints = [
+    [49.0,-121.2],[48.7,-121.3],[48.3,-121.0],[47.7,-121.5],
+    [47.4,-121.6],[47.0,-121.7],[46.7,-121.5],[46.5,-121.4]
+  ];
+  ctx.beginPath();
+  spinePoints.forEach(([lat,lon], i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // ── 4c: Columbia River ────────────────────────────────────────────────────
+  ctx.save();
+  ctx.strokeStyle = 'rgba(70,120,180,0.25)';
+  ctx.lineWidth   = 1.5;
+  ctx.setLineDash([]);
+  const columbiaPoints = [
+    [46.25,-124.05],[46.26,-123.5],[46.25,-122.8],[46.22,-121.4],
+    [46.05,-121.0],[45.9,-120.6],[45.7,-120.2],[45.7,-119.6],
+    [45.9,-118.9],[46.1,-118.5],[46.2,-118.1],[46.4,-117.7]
+  ];
+  ctx.beginPath();
+  columbiaPoints.forEach(([lat,lon], i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  ctx.restore();
+
+  // ── 4d: Puget Sound outline ───────────────────────────────────────────────
+  ctx.save();
+  const pugetPoints = [
+    [47.3,-122.4],[47.5,-122.3],[47.7,-122.3],[47.9,-122.4],
+    [48.1,-122.5],[48.4,-122.6],[48.6,-122.7],[48.7,-122.6],
+    [48.5,-122.4],[48.2,-122.2],[47.9,-122.1],[47.6,-122.2],[47.3,-122.2]
+  ];
+  ctx.beginPath();
+  pugetPoints.forEach(([lat,lon], i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(100,160,220,0.12)';
+  ctx.fill();
+  ctx.restore();
+
+  // Subtle grid
+  ctx.save();
+  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+  ctx.lineWidth = 0.8;
+  ctx.setLineDash([3,6]);
+  [46,47,48].forEach(lat => {
+    const [,y] = project(lat, -120, W, H);
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+  });
+  [-124,-122,-120,-118].forEach(lon => {
+    const [x] = project(48, lon, W, H);
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // ── 4e-extra: Skagit River ───────────────────────────────────────────────────
+  ctx.save();
+  ctx.strokeStyle = 'rgba(70,120,180,0.20)';
+  ctx.lineWidth = 1.2;
+  const skagitPoints = [
+    [48.52,-121.05],[48.48,-121.40],[48.42,-121.70],[48.38,-121.90],
+    [48.42,-122.10],[48.44,-122.28],[48.42,-122.45],[48.30,-122.55]
+  ];
+  ctx.beginPath();
+  skagitPoints.forEach(([lat,lon],i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Yakima River
+  ctx.strokeStyle = 'rgba(70,120,180,0.18)';
+  ctx.lineWidth = 1.0;
+  const yakimaPoints = [
+    [47.0,-121.50],[46.85,-120.80],[46.60,-120.51],[46.20,-119.80],[46.22,-119.10]
+  ];
+  ctx.beginPath();
+  yakimaPoints.forEach(([lat,lon],i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Snake River (SE border segment)
+  ctx.strokeStyle = 'rgba(70,120,180,0.20)';
+  ctx.lineWidth = 1.2;
+  const snakePoints = [
+    [46.54,-116.92],[46.20,-116.98],[46.00,-117.20],[45.90,-117.45],
+    [45.85,-118.00],[45.85,-118.60],[46.05,-119.00],[46.20,-119.30]
+  ];
+  ctx.beginPath();
+  snakePoints.forEach(([lat,lon],i) => {
+    const [x,y] = project(lat, lon, W, H);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  ctx.restore();
+
+  // Region labels
+  ctx.save();
+  ctx.font = '500 10px DM Mono, monospace';
+  ctx.fillStyle = 'rgba(0,0,0,0.22)';
+  ctx.textAlign = 'center';
+  [
+    { label:'OLYMPIC NP',          lat:47.95, lon:-123.65 },
+    { label:'MT RAINIER NP',       lat:46.82, lon:-121.73 },
+    { label:'NORTH CASCADES NP',   lat:48.50, lon:-121.00 },
+  ].forEach(r => {
+    const [x,y] = project(r.lat, r.lon, W, H);
+    ctx.fillText(r.label, x, y);
+  });
+  ctx.restore();
+
+  // ── City labels ───────────────────────────────────────────────────────────
+  ctx.save();
+  const cities = [
+    { name:'Seattle',    lat:47.606, lon:-122.332, align:'right' },
+    { name:'Tacoma',     lat:47.252, lon:-122.444, align:'right' },
+    { name:'Olympia',    lat:47.037, lon:-122.900, align:'right' },
+    { name:'Bellingham', lat:48.752, lon:-122.478, align:'right' },
+    { name:'Spokane',    lat:47.659, lon:-117.426, align:'left'  },
+    { name:'Yakima',     lat:46.602, lon:-120.506, align:'right' },
+    { name:'Walla Walla',lat:46.064, lon:-118.343, align:'left'  },
+  ];
+  cities.forEach(c => {
+    const [cx2, cy2] = project(c.lat, c.lon, W, H);
+    // City dot
+    ctx.beginPath();
+    ctx.arc(cx2, cy2, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fill();
+    // City label
+    ctx.font = '400 9px DM Sans, sans-serif';
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    ctx.textAlign = c.align === 'right' ? 'right' : 'left';
+    const dx = c.align === 'right' ? -5 : 5;
+    ctx.fillText(c.name, cx2 + dx, cy2 + 3);
+  });
+  ctx.restore();
+
+  // ── 4e: Mountain symbols ──────────────────────────────────────────────────
+  ctx.save();
+  ctx.font = '9px sans-serif';
+  ctx.fillStyle = 'rgba(0,0,0,0.20)';
+  ctx.textAlign = 'center';
+  // Olympic mountains cluster
+  {
+    const [bx, by] = project(47.85, -123.45, W, H);
+    ctx.fillText('▲', bx - 8, by + 10);
+    ctx.fillText('▲', bx + 4, by + 4);
+    ctx.fillText('▲', bx - 2, by + 16);
+  }
+  // Rainier cluster
+  {
+    const [rx, ry] = project(46.85, -121.73, W, H);
+    ctx.fillText('▲', rx - 6, ry + 8);
+    ctx.fillText('▲', rx + 6, ry + 12);
+    ctx.fillText('▲', rx,     ry + 4);
+  }
+  // North Cascades cluster
+  {
+    const [nx, ny] = project(48.5, -120.8, W, H);
+    ctx.fillText('▲', nx - 7, ny + 8);
+    ctx.fillText('▲', nx + 5, ny + 6);
+    ctx.fillText('▲', nx - 1, ny + 14);
+  }
+  ctx.restore();
+
+  // Distance scale
+  ctx.save();
+  const scaleY = H - 18;
+  const [sx0] = project(46.0, WA_BOUNDS.lonMin + 0.3, W, H);
+  const [sx1] = project(46.0, WA_BOUNDS.lonMin + 0.3 + 1.45, W, H);
+  ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(sx0, scaleY);
+  ctx.lineTo(sx1, scaleY);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(sx0, scaleY - 3); ctx.lineTo(sx0, scaleY + 3);
+  ctx.moveTo(sx1, scaleY - 3); ctx.lineTo(sx1, scaleY + 3);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.font = '9px DM Mono, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('100 miles ≈', sx0, scaleY - 6);
+  ctx.restore();
+
+  // ── Trail dots — two-pass draw so Hard always renders on top ─────────────
+  // Pass 1: Easy (diff=1) and Moderate (diff=3) — drawn first, can be overwritten
+  // Pass 2: Hard (diff=5) — drawn second at full opacity + slightly larger radius,
+  //         guaranteeing Hard dots visually dominate any nearby Easy/Moderate dots.
+  function drawDot(dp, isHardPass) {
+    if (!visibleTrailIds.has(dp.id)) return;
+    const t = TRAILS.find(x => x.id === dp.id);
+    if (!t) return;
+    const isHard = t.diff === 5;
+    // In pass 1 skip Hard; in pass 2 skip non-Hard
+    if (isHardPass && !isHard) return;
+    if (!isHardPass && isHard) return;
+
+    const cfg = diffCfg(t.diff);
+    const isHovered = hoveredId === dp.id;
+    const isActive  = activeId  === dp.id;
+    const lit = isHovered || isActive;
+
+    // Glow rings when lit
+    if (lit) {
+      ctx.beginPath();
+      ctx.arc(dp.x, dp.y, 20, 0, Math.PI*2);
+      ctx.fillStyle = cfg.col + '20';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(dp.x, dp.y, 13, 0, Math.PI*2);
+      ctx.fillStyle = cfg.col + '35';
+      ctx.fill();
+    }
+
+    // Hard dots: r=8 base (1px bigger) and full opacity so they always visually win
+    const baseR = isHard ? 8 : 7;
+    const r = lit ? 10 : baseR;
+    ctx.beginPath();
+    ctx.arc(dp.x, dp.y, r, 0, Math.PI*2);
+    // Hard: always full opacity; Easy/Moderate: slight transparency when not lit
+    ctx.fillStyle = (lit || isHard) ? cfg.col : cfg.col + 'cc';
+    ctx.fill();
+    ctx.strokeStyle = lit ? cfg.ink : 'rgba(255,255,255,0.9)';
+    ctx.lineWidth   = lit ? 2 : 1.5;
+    ctx.stroke();
+  }
+
+  // Pass 1: Easy + Moderate
+  dotPositions.forEach(dp => drawDot(dp, false));
+  // Pass 2: Hard — redrawn explicitly on top
+  dotPositions.forEach(dp => drawDot(dp, true));
+}
+
+// ── Hit test ─────────────────────────────────────────────────────────────────
+function hitTest(mx, my) {
+  for (const dp of dotPositions) {
+    if (!visibleTrailIds.has(dp.id)) continue;
+    const dx = mx - dp.x, dy = my - dp.y;
+    if (Math.sqrt(dx*dx+dy*dy) < 18) return dp.id;
+  }
+  return null;
+}
+
+// ── Activate from map hover ───────────────────────────────────────────────────
+function activateFromMap(id, mouseX, mouseY) {
+  if (hoveredId === id) return;
+  hoveredId = id;
+  drawMap();
+
+  const t = TRAILS.find(x => x.id === id);
+  ttName.textContent   = t.name;
+  ttRegion.textContent = t.region;
+  tooltip.classList.add('visible');
+
+  const pw = rightPanel.offsetWidth;
+  const ph = rightPanel.offsetHeight;
+  let tx = mouseX + 16;
+  let ty = mouseY - 10;
+  if (tx + 180 > pw) tx = mouseX - 196;
+  if (ty + 80  > ph) ty = mouseY - 80;
+  tooltip.style.left = tx + 'px';
+  tooltip.style.top  = ty + 'px';
+
+  highlightCard(id);
+  scrollToCard(id);
+}
+
+function deactivateFromMap() {
+  hoveredId = null;
+  tooltip.classList.remove('visible');
+  drawMap();
+  clearCardHighlight();
+}
+
+// ── Activate from card hover ──────────────────────────────────────────────────
+function activateFromCard(id) {
+  activeId = id;
+  drawMap();
+}
+
+function deactivate() {
+  activeId = null;
+  drawMap();
+}
+
+// ── Card highlighting ─────────────────────────────────────────────────────────
+function highlightCard(id) {
+  clearCardHighlight();
+  const card = document.getElementById('card-' + id);
+  if (!card) return;
+  const t   = TRAILS.find(x => x.id === id);
+  const cfg = diffCfg(t.diff);
+  card.style.boxShadow = `0 4px 20px ${cfg.col}26`;
+  card.classList.add('highlighted');
+}
+
+function clearCardHighlight() {
+  document.querySelectorAll('.trail-card.highlighted').forEach(c => {
+    c.classList.remove('highlighted');
+    c.style.boxShadow = '';
+  });
+}
+
+function scrollToCard(id) {
+  const card  = document.getElementById('card-' + id);
+  const panel = document.getElementById('leftPanel');
+  if (!card || !panel) return;
+  const cardTop = card.offsetTop;
+  const panelH  = panel.clientHeight;
+  const cardH   = card.offsetHeight;
+  const target  = cardTop - panelH/2 + cardH/2 - 56;
+  panel.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+}
+
+// ── Canvas mouse events ───────────────────────────────────────────────────────
+canvas.addEventListener('mousedown', e => {
+  isDragging = true;
+  dragLast   = { x: e.clientX, y: e.clientY };
+  canvas.style.cursor = 'grabbing';
+});
+
+canvas.addEventListener('mouseup', () => {
+  isDragging = false;
+  dragLast   = null;
+  canvas.style.cursor = 'default';
+});
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mx   = e.clientX - rect.left;
+  const my   = e.clientY - rect.top;
+
+  if (isDragging && dragLast) {
+    mapPanX += e.clientX - dragLast.x;
+    mapPanY += e.clientY - dragLast.y;
+    dragLast = { x: e.clientX, y: e.clientY };
+    recalcDots();
+    drawMap();
+    return;
+  }
+
+  const hit = hitTest(mx, my);
+  if (hit !== null) {
+    canvas.style.cursor = 'pointer';
+    activateFromMap(hit, mx, my);
+  } else {
+    canvas.style.cursor = 'default';
+    deactivateFromMap();
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  isDragging = false;
+  dragLast   = null;
+  deactivateFromMap();
+  canvas.style.cursor = 'default';
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const mx   = e.clientX - rect.left;
+  const my   = e.clientY - rect.top;
+  const factor = e.deltaY > 0 ? 0.85 : 1.15;
+  zoomMap(factor, mx, my);
+}, { passive: false });
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+new ResizeObserver(resize).observe(rightPanel);
+resize();
+
+// ── iframe context: hide topbar + chapter-header ─────────────────────────────
+if (window.self !== window.top) {
+  ['.topbar', '.chapter-header'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) el.style.display = 'none';
+  });
+}
+</script>
+</body>
+</html>

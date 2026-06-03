@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trail Guidebook — US National Parks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,500;1,9..144,200;1,9..144,300&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens ─────────────────────────────────────────────────────── */
+:root {
+  --bg:        #f2ece0;
+  --surface:   #ffffff;
+  --surface2:  #ede8e0;
+  --border:    rgba(0,0,0,0.08);
+  --border-md: rgba(0,0,0,0.14);
+  --text:      #1a1a1a;
+  --muted:     #6b6b6b;
+  --dim:       #b0a99e;
+  --green:     #52b788;
+  --green-dk:  #2d6a4f;
+  --green-lt:  #eaf5ef;
+  --ink:       #2d5a3d;
+  --toc-w:     220px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Shared type ────────────────────────────────────────────────────────── */
+.kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0;
+  line-height: 1;
+}
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(14px, 1.7vw, 20px);   /* compact for narrow banner */
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 0;
+}
+.section-title em { font-style: italic; color: var(--ink); }
+.section-sub {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: 600px;
+  /* single-line ellipsis — subtitle compressed in banner */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COVER SECTION
+══════════════════════════════════════════════════════════════════════════ */
+.cover {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 32px 60px;
+  overflow: hidden;
+}
+
+.cover-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cover-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cover-eyebrow::before,
+.cover-eyebrow::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--dim);
+  opacity: 0.45;
+}
+
+.cover-rule {
+  width: 48px;
+  height: 1.5px;
+  background: var(--green);
+  opacity: 0.6;
+  margin: 0 auto 22px;
+  border: none;
+}
+
+.cover-h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(42px, 6.5vw, 76px);
+  font-weight: 200;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.cover-h1 em { font-style: italic; color: var(--ink); }
+
+.cover-sub {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.68;
+  max-width: 460px;
+  margin: 0 auto 36px;
+}
+
+/* Data source badge */
+.cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-md);
+  border-radius: 999px;
+  margin-bottom: 40px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.18s;
+}
+.cover-badge:hover {
+  border-color: var(--green);
+  box-shadow: 0 2px 12px rgba(82,183,136,0.18);
+}
+.cover-badge-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+.cover-badge-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.cover-badge-text strong {
+  color: var(--text);
+  font-weight: 500;
+}
+.cover-badge-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--green-dk);
+  border-left: 1px solid var(--border-md);
+  padding-left: 8px;
+  letter-spacing: 0.04em;
+}
+
+/* Chapter pills */
+.cover-chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 56px;
+}
+.cover-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.cover-pill:hover {
+  border-color: var(--green);
+  box-shadow: 0 2px 10px rgba(82,183,136,0.15);
+}
+.cover-pill-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--dim);
+}
+
+/* Scroll cue */
+.cover-scroll-cue {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.2s;
+}
+.cover-scroll-cue:hover { opacity: 0.7; }
+.cover-scroll-cue-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.cover-scroll-arrow {
+  width: 16px; height: 16px;
+  border-right: 1.5px solid var(--dim);
+  border-bottom: 1.5px solid var(--dim);
+  transform: rotate(45deg);
+  animation: cue-bob 1.8s ease-in-out infinite;
+}
+@keyframes cue-bob {
+  0%, 100% { transform: rotate(45deg) translate(0,0); }
+  50%       { transform: rotate(45deg) translate(2px,2px); }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTENT SECTIONS
+══════════════════════════════════════════════════════════════════════════ */
+.section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;                 /* breathing room between banner and iframe */
+  margin-bottom: 56px;       /* gap between sections */
+}
+
+/* Section 1 expands naturally — no fixed height, scrolls with the page */
+#s-map {
+  height: auto;
+  margin-bottom: 120px;
+}
+
+/* Extra-wide gap specifically between sections 2–4 */
+
+/* ── Banner — fixed in flow (not sticky/floating) ───────────────────────── */
+.section-head {
+  background: var(--bg);
+  border-top: 2px solid rgba(82,183,136,0.25);
+  border-bottom: 1px solid var(--border);
+  padding: 7px 52px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+/* Decorative divider — not needed */
+.section-divider { display: none; }
+
+/* iframe fills remaining section height */
+.section-viz {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.section-viz iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Section 1 iframe: natural height (auto-sized by JS), no absolute positioning */
+#s-map .section-viz {
+  flex: none;
+  min-height: 0;
+  position: static;
+}
+#s-map .section-viz iframe {
+  position: static;
+  width: 100%;
+  height: 1150px;  /* fallback; JS resizes to full content height on load */
+  display: block;
+}
+
+/* Section separators — not needed, margin handles spacing */
+.section-gap { display: none; }
+
+/* ── Section-1 iframe lock ───────────────────────────────────────────────── */
+/* Sits above the iframe, blocking all pointer/scroll events until unlocked  */
+.viz-lock {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: default;
+  /* No background — completely invisible */
+}
+.viz-lock.unlocked {
+  display: none;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RIGHT-SIDE SCROLL DIAL TOC
+══════════════════════════════════════════════════════════════════════════ */
+.toc {
+  position: fixed;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  pointer-events: none; /* children opt in */
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 5px 0;
+  cursor: pointer;
+  pointer-events: all;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: padding 0.4s ease;
+}
+
+/* The label text */
+.toc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: var(--muted);
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.4s ease, opacity 0.35s ease, color 0.25s;
+}
+
+/* The dot / pip */
+.toc-pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dim);
+  opacity: 0.35;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+}
+
+/* Active item — pip grows, label shown */
+.toc-item.active .toc-pip {
+  width: 8px;
+  height: 8px;
+  background: var(--text);
+  opacity: 1;
+}
+.toc-item.active .toc-label {
+  max-width: 200px;
+  opacity: 1;
+  color: var(--text);
+}
+
+/* While scrolling — show all labels */
+body.is-scrolling .toc-label {
+  max-width: 200px;
+  opacity: 0.4;
+}
+body.is-scrolling .toc-item.active .toc-label {
+  opacity: 1;
+  color: var(--text);
+}
+body.is-scrolling .toc-pip {
+  opacity: 0.5;
+}
+body.is-scrolling .toc-item.active .toc-pip {
+  opacity: 1;
+}
+
+/* Hover: show label for any item */
+.toc-item:hover .toc-label {
+  max-width: 200px;
+  opacity: 0.75;
+}
+.toc-item:hover .toc-pip {
+  opacity: 0.7;
+}
+
+/* Cover-specific: white toc on dark cover bg when first section is active */
+body.on-cover .toc-pip { background: rgba(0,0,0,0.25); }
+body.on-cover .toc-item.active .toc-pip { background: var(--text); }
+body.on-cover .toc-label { color: var(--muted); }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .toc { display: none; }
+  .section-head { padding: 7px 24px; }
+  .section-sub { white-space: normal; }
+}
+@media (max-width: 600px) {
+  .section-head { padding: 6px 16px; }
+  .cover-h1 { font-size: clamp(36px, 10vw, 52px); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════ -->
+<section class="cover" id="s-cover">
+
+  <!-- Decorative SVG background -->
+  <svg class="cover-deco" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id="g-fade" cx="50%" cy="50%" r="65%">
+        <stop offset="0%"   stop-color="#f2ece0" stop-opacity="0.1"/>
+        <stop offset="75%"  stop-color="#f2ece0" stop-opacity="0.65"/>
+        <stop offset="100%" stop-color="#f2ece0" stop-opacity="0.92"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Mountain ridges -->
+    <path d="M0,700 L0,500 Q90,460 170,420 Q260,378 350,350 Q440,322 520,340 Q600,358 680,320 Q760,282 840,260 Q920,238 1000,268 Q1080,298 1160,270 L1200,255 L1200,700 Z" fill="#3a7a54" fill-opacity="0.11"/>
+    <path d="M0,700 L0,555 Q80,525 170,500 Q270,472 360,490 Q450,508 540,480 Q630,452 720,432 Q810,412 900,438 Q990,464 1080,435 Q1160,408 1200,420 L1200,700 Z" fill="#4a8f64" fill-opacity="0.07"/>
+    <path d="M0,700 L0,630 Q100,608 200,600 Q310,592 420,614 Q530,636 640,620 Q750,604 860,616 Q970,628 1080,615 Q1150,606 1200,610 L1200,700 Z" fill="#2d6a4f" fill-opacity="0.05"/>
+
+    <!-- Tree cluster left -->
+    <polygon points="38,645 60,578 82,645" fill="#2d6a4f" fill-opacity="0.12"/>
+    <polygon points="43,614 60,556 77,614" fill="#3a7a54" fill-opacity="0.10"/>
+    <rect x="57" y="643" width="6" height="13" fill="#2d6a4f" fill-opacity="0.08"/>
+    <polygon points="88,648 114,572 140,648" fill="#2d6a4f" fill-opacity="0.11"/>
+    <polygon points="94,618 114,550 134,618" fill="#3a7a54" fill-opacity="0.09"/>
+    <rect x="111" y="646" width="6" height="14" fill="#2d6a4f" fill-opacity="0.07"/>
+    <polygon points="16,655 36,608 56,655" fill="#4a8f64" fill-opacity="0.08"/>
+
+    <!-- Tree cluster right -->
+    <polygon points="1058,643 1080,577 1102,643" fill="#2d6a4f" fill-opacity="0.12"/>
+    <polygon points="1063,612 1080,557 1097,612" fill="#3a7a54" fill-opacity="0.10"/>
+    <rect x="1077" y="641" width="6" height="13" fill="#2d6a4f" fill-opacity="0.08"/>
+    <polygon points="1108,649 1136,574 1164,649" fill="#2d6a4f" fill-opacity="0.11"/>
+    <polygon points="1114,618 1136,553 1158,618" fill="#3a7a54" fill-opacity="0.09"/>
+    <rect x="1133" y="647" width="6" height="14" fill="#2d6a4f" fill-opacity="0.07"/>
+    <polygon points="1148,657 1170,610 1192,657" fill="#4a8f64" fill-opacity="0.07"/>
+
+    <!-- Scattered trail dots -->
+    <g opacity="0.3" fill="#52b788">
+      <circle cx="82"  cy="115" r="2.4"/><circle cx="164" cy="82"  r="1.7"/>
+      <circle cx="244" cy="155" r="2.1"/><circle cx="306" cy="108" r="1.5"/>
+      <circle cx="402" cy="137" r="2.6"/><circle cx="484" cy="88"  r="1.5"/>
+      <circle cx="562" cy="168" r="1.9"/><circle cx="644" cy="98"  r="1.8"/>
+      <circle cx="724" cy="148" r="2.3"/><circle cx="804" cy="78"  r="1.6"/>
+      <circle cx="902" cy="128" r="2.0"/><circle cx="984" cy="168" r="2.5"/>
+      <circle cx="1062" cy="92" r="1.7"/><circle cx="1142" cy="142" r="2.2"/>
+      <circle cx="122" cy="275" r="1.8"/><circle cx="204" cy="248" r="2.3"/>
+      <circle cx="334" cy="308" r="1.5"/><circle cx="444" cy="258" r="2.1"/>
+      <circle cx="552" cy="288" r="1.7"/><circle cx="664" cy="238" r="2.4"/>
+      <circle cx="782" cy="282" r="1.6"/><circle cx="874" cy="252" r="1.9"/>
+      <circle cx="1002" cy="298" r="2.2"/><circle cx="1104" cy="262" r="1.4"/>
+      <circle cx="96"   cy="428" r="2.0"/><circle cx="212" cy="408" r="1.6"/>
+      <circle cx="362" cy="458" r="2.3"/><circle cx="492" cy="418" r="1.8"/>
+      <circle cx="612" cy="452" r="2.1"/><circle cx="734" cy="412" r="1.5"/>
+      <circle cx="852" cy="448" r="2.4"/><circle cx="954" cy="422" r="1.7"/>
+    </g>
+
+    <!-- Trail connecting lines -->
+    <g opacity="0.06" stroke="#2d6a4f" stroke-width="1" fill="none">
+      <path d="M82,115 Q164,82 244,155 Q306,108 402,137"/>
+      <path d="M484,88 Q562,168 644,98 Q724,148 804,78"/>
+      <path d="M122,275 Q204,248 334,308 Q444,258 552,288"/>
+      <path d="M664,238 Q782,282 874,252 Q1002,298 1104,262"/>
+    </g>
+
+    <!-- Compass rose -->
+    <g transform="translate(1122,634)" opacity="0.07" stroke="#2d6a4f" stroke-width="1.5" fill="none">
+      <circle cx="0" cy="0" r="34"/>
+      <line x1="0" y1="-34" x2="0" y2="34"/>
+      <line x1="-34" y1="0" x2="34" y2="0"/>
+      <line x1="-24" y1="-24" x2="-19" y2="-19"/>
+      <line x1="24"  y1="-24" x2="19"  y2="-19"/>
+      <line x1="-24" y1="24"  x2="-19" y2="19"/>
+      <line x1="24"  y1="24"  x2="19"  y2="19"/>
+      <polygon points="0,-38 -4,-28 4,-28" fill="#2d6a4f" fill-opacity="0.07" stroke="none"/>
+      <circle cx="0" cy="0" r="4"/>
+    </g>
+
+    <rect width="1200" height="700" fill="url(#g-fade)"/>
+  </svg>
+
+  <div class="cover-content">
+    <div class="cover-eyebrow">A beginner's guidebook · National Park Trails</div>
+
+    <hr class="cover-rule">
+
+    <h1 class="cover-h1">
+      Choose your first<br><em>national park trail</em>
+    </h1>
+
+    <p class="cover-sub">
+      Thousands of trails. Dozens of national parks. Four interactive chapters to take you from total beginner to standing confidently at a trailhead.
+    </p>
+
+    <!-- Data source badge -->
+    <a class="cover-badge" href="https://www.kaggle.com/code/jessicaqjiang/all-trails-in-np-analysis" target="_blank" rel="noopener">
+      <span class="cover-badge-dot"></span>
+      <span class="cover-badge-text"><strong>3,311 trails · 50 states</strong> · AllTrails dataset</span>
+      <span class="cover-badge-link">↗ kaggle source</span>
+    </a>
+
+    <!-- Chapter pills -->
+    <div class="cover-chapters">
+      <a class="cover-pill" href="#s-map">
+        <span class="cover-pill-num">01</span>Where the trails are
+      </a>
+      <a class="cover-pill" href="#s-scatter">
+        <span class="cover-pill-num">02</span>Length &amp; elevation
+      </a>
+      <a class="cover-pill" href="#s-compare">
+        <span class="cover-pill-num">03</span>Same difficulty
+      </a>
+      <a class="cover-pill" href="#s-explorer">
+        <span class="cover-pill-num">04</span>Pick your trail
+      </a>
+    </div>
+  </div>
+
+  <div class="cover-scroll-cue" onclick="document.getElementById('s-map').scrollIntoView({behavior:'smooth'})">
+    <div class="cover-scroll-cue-text">Scroll to explore</div>
+    <div class="cover-scroll-arrow"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     01 · WHERE THE TRAILS ARE  (plot-6)
+══════════════════════════════════════════════════ -->
+<div class="section-gap"></div>
+<section class="section" id="s-map">
+  <div class="section-head">
+    <div class="kicker">01 · Interactive Map</div>
+    <h2 class="section-title">Every trail, <em>every state</em></h2>
+    <p class="section-sub">
+      3,311 national park trails mapped across all 50 states. Toggle between terrain & landforms, trail density, and difficulty levels — zoom in to explore any region up close.
+    </p>
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-viz">
+    <!-- Overlay blocks iframe interaction until cover is fully scrolled past -->
+    <div class="viz-lock" id="map-lock"></div>
+    <iframe src="plot-6.html" title="US National Park Trail Map" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     02 · EVERY TRAIL BY LENGTH & ELEVATION  (plot-2)
+══════════════════════════════════════════════════ -->
+<div class="section-gap"></div>
+<section class="section" id="s-scatter">
+  <div class="section-head">
+    <div class="kicker">02 · Trail Metrics</div>
+    <h2 class="section-title">Length versus <em>elevation gain</em></h2>
+    <p class="section-sub">
+      Every dot is a real trail — colored by difficulty. Scroll to zoom in on a cluster, drag to pan, click any dot for details. Two numbers that together explain most of the challenge.
+    </p>
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-viz">
+    <iframe src="plot_2.html" title="Trail Metrics Scatterplot" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     03 · SAME DIFFICULTY, DIFFERENT TRAILS  (plot-3)
+══════════════════════════════════════════════════ -->
+<div class="section-gap"></div>
+<section class="section" id="s-compare">
+  <div class="section-head">
+    <div class="kicker">03 · Difficulty in Detail</div>
+    <h2 class="section-title">Same rating, <em>different trails</em></h2>
+    <p class="section-sub">
+      Three trails share the same difficulty number but demand very different effort. Switch between Easy, Moderate, and Hard to watch the gap grow — and compare the numbers below.
+    </p>
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-viz">
+    <iframe src="plot_3.html" title="Trail Difficulty Comparison" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     04 · PICK YOUR TRAIL  (plot-5)
+══════════════════════════════════════════════════ -->
+<div class="section-gap"></div>
+<section class="section" id="s-explorer">
+  <div class="section-head">
+    <div class="kicker">04 · Trail Explorer</div>
+    <h2 class="section-title">Pick <em>your first trail</em></h2>
+    <p class="section-sub">
+      Browse Washington's national park trails filtered by difficulty. Hover any dot on the map for details, select trails to compare them side by side — then head to the trailhead.
+    </p>
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-viz">
+    <iframe src="plot_5.html" title="Washington Trail Explorer" loading="lazy"></iframe>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+     SCROLL DIAL TOC
+══════════════════════════════════════════════════ -->
+<nav class="toc" id="toc" aria-label="Section navigation">
+  <a class="toc-item" href="#s-cover" data-target="s-cover">
+    <span class="toc-label">Welcome!</span>
+    <span class="toc-pip"></span>
+  </a>
+  <a class="toc-item" href="#s-map" data-target="s-map">
+    <span class="toc-label">Where the trails are</span>
+    <span class="toc-pip"></span>
+  </a>
+  <a class="toc-item" href="#s-scatter" data-target="s-scatter">
+    <span class="toc-label">Length &amp; elevation</span>
+    <span class="toc-pip"></span>
+  </a>
+  <a class="toc-item" href="#s-compare" data-target="s-compare">
+    <span class="toc-label">Same difficulty</span>
+    <span class="toc-pip"></span>
+  </a>
+  <a class="toc-item" href="#s-explorer" data-target="s-explorer">
+    <span class="toc-label">Pick your trail</span>
+    <span class="toc-pip"></span>
+  </a>
+</nav>
+
+
+<script>
+// ── Section IDs (order matches TOC items) ─────────────────────────────────────
+const SECTIONS = ['s-cover', 's-map', 's-scatter', 's-compare', 's-explorer'];
+const sectionEls = SECTIONS.map(id => document.getElementById(id));
+const tocItems   = document.querySelectorAll('.toc-item');
+
+// ── TOC: map items by data-target attribute ───────────────────────────────────
+function setActiveToc(id) {
+  tocItems.forEach(item => item.classList.toggle('active', item.dataset.target === id));
+  document.body.classList.toggle('on-cover', id === 's-cover');
+}
+
+// ── Active section via scroll position (reliable, no timing issues) ───────────
+function getActiveId() {
+  // The section whose top edge is closest to (but not past) 45% down the viewport
+  const trigger = window.scrollY + window.innerHeight * 0.45;
+  let best = sectionEls[0];
+  for (const el of sectionEls) {
+    if (el && el.offsetTop <= trigger) best = el;
+  }
+  return best ? best.id : SECTIONS[0];
+}
+
+// ── Scroll → TOC active + dial expand ────────────────────────────────────────
+let rafId     = null;
+let dialTimer = null;
+
+function onScrollFrame() {
+  setActiveToc(getActiveId());
+  document.body.classList.add('is-scrolling');
+  clearTimeout(dialTimer);
+  dialTimer = setTimeout(() => document.body.classList.remove('is-scrolling'), 900);
+  rafId = null;
+}
+
+window.addEventListener('scroll', () => {
+  if (!rafId) rafId = requestAnimationFrame(onScrollFrame);
+}, { passive: true });
+
+// ── TOC click → smooth scroll to section ─────────────────────────────────────
+tocItems.forEach(item => {
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.getElementById(item.dataset.target);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ── Keyboard navigation ───────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  const id  = getActiveId();
+  const idx = SECTIONS.indexOf(id);
+  if (['ArrowDown','PageDown'].includes(e.key)) {
+    e.preventDefault();
+    const next = sectionEls[Math.min(SECTIONS.length-1, idx+1)];
+    if (next) next.scrollIntoView({ behavior: 'smooth' });
+  }
+  if (['ArrowUp','PageUp'].includes(e.key)) {
+    e.preventDefault();
+    const prev = sectionEls[Math.max(0, idx-1)];
+    if (prev) prev.scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+// ── Cover pill / scroll-cue links ─────────────────────────────────────────────
+document.querySelectorAll('.cover-pill[href^="#"]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.getElementById(el.getAttribute('href').slice(1));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+document.querySelector('.cover-scroll-cue')?.addEventListener('click', () => {
+  sectionEls[1]?.scrollIntoView({ behavior: 'smooth' });
+});
+
+// ── Section-1 iframe lock: unlock only after cover is fully scrolled past ─────
+const mapLock = document.getElementById('map-lock');
+const coverEl = document.getElementById('s-cover');
+
+if (mapLock && coverEl) {
+  const lockIO = new IntersectionObserver(entries => {
+    // threshold: 0 → fires when cover goes from any-visible to fully-gone
+    const coverVisible = entries[0].isIntersecting;
+    if (coverVisible) {
+      mapLock.classList.remove('unlocked');   // cover still in view → keep lock
+    } else {
+      mapLock.classList.add('unlocked');      // cover gone → allow interaction
+    }
+  }, { threshold: 0 });
+  lockIO.observe(coverEl);
+}
+
+// ── Section-1 iframe: auto-resize to full content height ─────────────────────
+// This makes the parent page scroll through map + knowledge cards naturally,
+// exactly as plot-6 behaves when opened standalone.
+(function () {
+  const mapIframe = document.querySelector('#s-map iframe');
+  if (!mapIframe) return;
+
+  function resizeMapIframe() {
+    try {
+      const doc = mapIframe.contentDocument || mapIframe.contentWindow.document;
+      const h = doc.documentElement.scrollHeight || doc.body.scrollHeight;
+      if (h > 200) mapIframe.style.height = h + 'px';
+    } catch (e) {/* cross-origin guard */}
+  }
+
+  mapIframe.addEventListener('load', () => {
+    resizeMapIframe();
+    // Re-check once fonts/images have settled
+    setTimeout(resizeMapIframe, 400);
+    setTimeout(resizeMapIframe, 1200);
+  });
+
+  // Also resize if window width changes (SVG map is responsive)
+  window.addEventListener('resize', resizeMapIframe, { passive: true });
+})();
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+setActiveToc(getActiveId());
+</script>
+</body>
+</html>
