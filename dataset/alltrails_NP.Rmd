@@ -1,0 +1,37 @@
+---
+title: "alltrails_NP"
+author: "Evanna Yang"
+date: "2026-05-15"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document:
+    df_print: paged
+---
+
+
+```{r}
+# 1. Load the raw data
+df <- read.csv("alltrails-data.csv", stringsAsFactors = FALSE)
+
+# 2. Drop the "visitor_usage" column
+df_clean$visitor_usage <- NULL
+
+# 3. Fix the Geographic Errors
+df_clean$state_name[df_clean$state_name == "Maui"] <- "Hawaii"
+df_clean$country_name <- NULL
+
+# 4. Add Unit Conversion Variables
+df_clean$length_mile <- df_clean$length * 0.000621371
+df_clean$elevation_gain_ft <- df_clean$elevation_gain * 3.28084
+
+# 5. Filter out placeholder rows (length == 0)
+df_clean <- subset(df_clean, length > 0)
+
+# 6. Save the clean dataset to a new CSV file
+write.csv(df_clean, "alltrails_cleaned.csv", row.names = FALSE)
+cat("Data cleaned and 'visitor_usage' column successfully dropped!\n")
+```
+
+
+
