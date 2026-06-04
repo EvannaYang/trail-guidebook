@@ -1,0 +1,1264 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={511 Exploration Data Analysis},
+  pdfauthor={Evanna Yang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{511 Exploration Data Analysis}
+\author{Evanna Yang}
+\date{2026-05-03}
+
+\begin{document}
+\maketitle
+
+\section{=============================================================================}\label{section}
+
+\section{\texorpdfstring{Source:
+\url{https://trails-wa-rco.hub.arcgis.com}}{Source: https://trails-wa-rco.hub.arcgis.com}}\label{source-httpstrails-wa-rco.hub.arcgis.com}
+
+\section{df\_q1 \textbar{} COMPARATIVE \textbar{} surface type
+vs.~segment length \& width by
+use}\label{df_q1-comparative-surface-type-vs.-segment-length-width-by-use}
+
+\section{df\_q2 \textbar{} CORRELATION \textbar{} trail width vs.~number
+of permitted use
+types}\label{df_q2-correlation-trail-width-vs.-number-of-permitted-use-types}
+
+\section{df\_q3 \textbar{} GEOGRAPHIC \textbar{} motorized
+vs.~non-motorized trail miles by
+county}\label{df_q3-geographic-motorized-vs.-non-motorized-trail-miles-by-county}
+
+\section{df\_q4 \textbar{} TIME/TREND \textbar{} construction volume
+over time by trail type \&
+agency}\label{df_q4-timetrend-construction-volume-over-time-by-trail-type-agency}
+
+\section{}\label{section-1}
+
+\section{Variable inventory per
+sub-dataset:}\label{variable-inventory-per-sub-dataset}
+
+\section{┌──────┬──────────────────────────────────────────────────────────────────┐}\label{section-2}
+
+\section{│ df\_q1│ objectid, trail\_name, surface\_cat, use\_cat,
+│}\label{df_q1-objectid-trail_name-surface_cat-use_cat}
+
+\section{│ │ segment\_length\_miles, trail\_width
+│}\label{segment_length_miles-trail_width}
+
+\section{├──────┼──────────────────────────────────────────────────────────────────┤}\label{section-3}
+
+\section{│ df\_q2│ objectid, trail\_name, trail\_width, num\_uses,
+│}\label{df_q2-objectid-trail_name-trail_width-num_uses}
+
+\section{│ │ motor\_type, {[}13 binary use flags{]}
+│}\label{motor_type-13-binary-use-flags}
+
+\section{├──────┼──────────────────────────────────────────────────────────────────┤}\label{section-4}
+
+\section{│ df\_q3│ objectid, trail\_name, county, region,
+│}\label{df_q3-objectid-trail_name-county-region}
+
+\section{│ │ is\_motorized, segment\_length\_miles
+│}\label{is_motorized-segment_length_miles}
+
+\section{├──────┼──────────────────────────────────────────────────────────────────┤}\label{section-5}
+
+\section{│ df\_q4│ objectid, trail\_name, year\_constructed, decade,
+era, │}\label{df_q4-objectid-trail_name-year_constructed-decade-era}
+
+\section{│ │ trail\_type\_cat, agency\_clean, segment\_length\_miles
+│}\label{trail_type_cat-agency_clean-segment_length_miles}
+
+\section{└──────┴──────────────────────────────────────────────────────────────────┘}\label{section-6}
+
+\section{=============================================================================}\label{section-7}
+
+\section{── 0. LIBRARIES
+──────────────────────────────────────────────────────────────}\label{libraries}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'lubridate' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.4     v readr     2.1.5
+## v forcats   1.0.0     v stringr   1.5.1
+## v ggplot2   3.5.1     v tibble    3.2.1
+## v lubridate 1.9.5     v tidyr     1.3.1
+## v purrr     1.0.4     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(janitor)    }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'janitor'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     chisq.test, fisher.test
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(skimr)       }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'skimr' was built under R version 4.4.3
+\end{verbatim}
+
+\section{── 1. LOAD \& INSPECT
+─────────────────────────────────────────────────────────}\label{load-inspect}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{trails\_raw }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"trails.csv"}\NormalTok{, }\AttributeTok{show\_col\_types =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat <- vroom(...)
+##   problems(dat)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{trails     }\OtherTok{\textless{}{-}}\NormalTok{ trails\_raw }\SpecialCharTok{|\textgreater{}} \FunctionTok{clean\_names}\NormalTok{()   }\CommentTok{\# → snake\_case column names}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Raw:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(trails), }\StringTok{"rows x"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(trails), }\StringTok{"cols}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Raw: 22338 rows x 51 cols
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(trails)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 22,338
+## Columns: 51
+## $ objectid                   <dbl> 32305, 32511, 32512, 32513, 32514, 32515, 3~
+## $ trail_name                 <chr> "Rufus", NA, "Bill Chipman Palouse Trail", ~
+## $ trail_alternate_name       <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ trail_number               <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ segment_id                 <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ segment_length_miles       <dbl> 0.02066238, 1.83708130, 13.86535544, 2.0383~
+## $ trail_system_type          <chr> "State", "State", "State", "State", "State"~
+## $ trail_system_name          <chr> NA, NA, NA, NA, NA, "Palouse to Cascades", ~
+## $ national_trail_designation <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ trail_surface              <chr> NA, "Natural", "Natural", "Asphalt", "Natur~
+## $ trail_condition            <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ trail_type                 <chr> NA, "Standard Terra Trail", "Standard Terra~
+## $ trail_class                <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ primary_use                <chr> NA, "Hiking", "Hiking", "Hiking", "Hiking",~
+## $ trail_width                <dbl> NA, NA, NA, 10, NA, NA, NA, NA, NA, NA, NA,~
+## $ trail_usage                <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ seasonality                <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ season_notes               <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ directionality             <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ speed_limit_mph            <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ accessibility_status       <chr> "Not Evaluated", NA, NA, NA, NA, NA, NA, NA~
+## $ special_management_area    <chr> NA, NA, NA, NA, NA, NA, NA, NA, "Other", "O~
+## $ interpretive_trail         <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ rail_trail                 <chr> NA, NA, NA, NA, NA, "yes", NA, NA, NA, NA, ~
+## $ hiking_walking             <chr> NA, "yes", "yes", "yes", "yes", "yes", "yes~
+## $ bicycle                    <chr> NA, "Yes", "Yes", "Yes", "Yes", "yes", "yes~
+## $ e_bike                     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ x4wd                       <chr> NA, NA, NA, NA, NA, NA, NA, NA, "No", "Unkn~
+## $ atv                        <chr> NA, NA, NA, NA, NA, NA, NA, NA, "No", "Unkn~
+## $ motorcycle                 <chr> NA, NA, NA, NA, NA, NA, NA, NA, "No", "Unkn~
+## $ pack_and_saddle            <chr> NA, NA, "yes", "yes", "yes", "yes", "yes", ~
+## $ motorized_watercraft       <chr> NA, NA, NA, NA, NA, NA, NA, NA, "No", "No",~
+## $ non_motorized_watercraft   <chr> NA, NA, NA, NA, NA, NA, NA, NA, "No", "No",~
+## $ cross_country_ski          <chr> NA, NA, NA, NA, NA, NA, NA, NA, "Unknown", ~
+## $ snowmobile                 <chr> NA, NA, NA, NA, NA, NA, NA, NA, "No", "Unkn~
+## $ snowshoe                   <chr> NA, NA, NA, NA, NA, NA, NA, NA, "Unknown", ~
+## $ dog_sled                   <chr> NA, NA, NA, NA, NA, NA, NA, NA, "Unknown", ~
+## $ pets_allowed               <chr> "Yes", NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ county                     <chr> "Stevens/Pend Oreille", "Whitman", "Whitman~
+## $ municipality               <chr> NA, "WADOT", "County", "WADOT", "WADOT", NA~
+## $ us_congressional_district  <dbl> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5~
+## $ state_legislative_district <dbl> 7, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9~
+## $ management_agency          <chr> "WA Department of Natural Resources", "WA D~
+## $ year_constructed           <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ last_maintenance           <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ right_of_way               <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ comments                   <chr> NA, "Built for new development. Still in pr~
+## $ informational_url          <chr> NA, NA, NA, NA, NA, NA, NA, NA, "http://whi~
+## $ global_id                  <chr> "f1bf53f8-361e-4205-8226-b0b9d202d119", "9c~
+## $ shape_length               <dbl> 33.25289, 2956.49668, 22314.13349, 3280.458~
+## $ trail_status               <chr> "Existing", "Existing", "Existing", "Existi~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{skim}\NormalTok{(trails)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Data summary}\tabularnewline
+\toprule\noalign{}
+\endfirsthead
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Name & trails \\
+Number of rows & 22338 \\
+Number of columns & 51 \\
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ & \\
+Column type frequency: & \\
+character & 40 \\
+logical & 2 \\
+numeric & 9 \\
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ & \\
+Group variables & None \\
+\end{longtable}
+
+\textbf{Variable type: character}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.3176}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1647}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0471}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0471}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0706}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1059}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1294}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+skim\_variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n\_missing
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+complete\_rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+min
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+empty
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n\_unique
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+whitespace
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+trail\_name & 156 & 0.99 & 1 & 74 & 0 & 6204 & 0 \\
+trail\_alternate\_name & 18904 & 0.15 & 2 & 65 & 0 & 460 & 0 \\
+segment\_id & 21682 & 0.03 & 1 & 48 & 0 & 614 & 0 \\
+trail\_system\_type & 1583 & 0.93 & 5 & 9 & 0 & 9 & 0 \\
+trail\_system\_name & 8421 & 0.62 & 3 & 52 & 0 & 566 & 0 \\
+national\_trail\_designation & 22093 & 0.01 & 3 & 31 & 0 & 7 & 0 \\
+trail\_surface & 2887 & 0.87 & 3 & 27 & 0 & 30 & 0 \\
+trail\_condition & 19044 & 0.15 & 1 & 29 & 0 & 14 & 0 \\
+trail\_type & 3191 & 0.86 & 4 & 20 & 0 & 13 & 0 \\
+trail\_class & 16847 & 0.25 & 3 & 20 & 0 & 11 & 0 \\
+primary\_use & 4159 & 0.81 & 4 & 20 & 0 & 21 & 0 \\
+trail\_usage & 21599 & 0.03 & 3 & 9 & 0 & 4 & 0 \\
+seasonality & 18595 & 0.17 & 6 & 13 & 0 & 5 & 0 \\
+season\_notes & 21834 & 0.02 & 9 & 25 & 0 & 6 & 0 \\
+directionality & 21834 & 0.02 & 2 & 20 & 0 & 15 & 0 \\
+accessibility\_status & 14666 & 0.34 & 7 & 14 & 0 & 4 & 0 \\
+special\_management\_area & 16764 & 0.25 & 3 & 40 & 0 & 23 & 0 \\
+interpretive\_trail & 21512 & 0.04 & 2 & 7 & 0 & 4 & 0 \\
+rail\_trail & 21361 & 0.04 & 2 & 3 & 0 & 4 & 0 \\
+hiking\_walking & 2065 & 0.91 & 2 & 7 & 0 & 5 & 0 \\
+bicycle & 8813 & 0.61 & 2 & 7 & 0 & 5 & 0 \\
+e\_bike & 19530 & 0.13 & 2 & 7 & 0 & 4 & 0 \\
+x4wd & 13103 & 0.41 & 2 & 7 & 0 & 4 & 0 \\
+atv & 10142 & 0.55 & 2 & 7 & 0 & 4 & 0 \\
+motorcycle & 10682 & 0.52 & 2 & 11 & 0 & 6 & 0 \\
+pack\_and\_saddle & 8634 & 0.61 & 2 & 11 & 0 & 9 & 0 \\
+motorized\_watercraft & 16192 & 0.28 & 2 & 7 & 0 & 4 & 0 \\
+non\_motorized\_watercraft & 13981 & 0.37 & 2 & 7 & 0 & 4 & 0 \\
+cross\_country\_ski & 14329 & 0.36 & 2 & 7 & 0 & 4 & 0 \\
+snowmobile & 14331 & 0.36 & 2 & 7 & 0 & 4 & 0 \\
+snowshoe & 15508 & 0.31 & 2 & 7 & 0 & 5 & 0 \\
+dog\_sled & 14844 & 0.34 & 2 & 7 & 0 & 4 & 0 \\
+pets\_allowed & 19154 & 0.14 & 2 & 7 & 0 & 5 & 0 \\
+county & 195 & 0.99 & 4 & 30 & 0 & 91 & 0 \\
+municipality & 19823 & 0.11 & 3 & 21 & 0 & 18 & 0 \\
+management\_agency & 224 & 0.99 & 3 & 49 & 0 & 139 & 0 \\
+comments & 14718 & 0.34 & 1 & 266 & 0 & 427 & 0 \\
+informational\_url & 18180 & 0.19 & 3 & 120 & 0 & 333 & 0 \\
+global\_id & 0 & 1.00 & 36 & 36 & 0 & 22338 & 0 \\
+trail\_status & 0 & 1.00 & 4 & 12 & 0 & 8 & 0 \\
+\end{longtable}
+}
+
+\textbf{Variable type: logical}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrrrl@{}}
+\toprule\noalign{}
+skim\_variable & n\_missing & complete\_rate & mean & count \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+last\_maintenance & 22338 & 0 & NaN & : \\
+right\_of\_way & 22338 & 0 & NaN & : \\
+\end{longtable}
+}
+
+\textbf{Variable type: numeric}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.2250}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0833}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1167}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0750}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0833}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0500}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0750}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0750}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0750}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0917}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+skim\_variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n\_missing
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+complete\_rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+sd
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p25
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p50
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p75
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p100
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+hist
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+objectid & 0 & 1.00 & 49684.26 & 6793.64 & 32305 & 44255.25 & 49849.50 &
+55445.75 & 61983.0 & ▁▇▇▇▇ \\
+trail\_number & 20267 & 0.09 & 928.24 & 1264.02 & 0 & 121.50 & 533.00 &
+1291.50 & 12110.0 & ▇▁▁▁▁ \\
+segment\_length\_miles & 257 & 0.99 & 0.99 & 4.41 & -1 & 0.05 & 0.17 &
+0.65 & 381.9 & ▇▁▁▁▁ \\
+trail\_width & 19493 & 0.13 & 7.87 & 4.77 & 0 & 4.00 & 8.00 & 10.00 &
+35.0 & ▇▇▂▁▁ \\
+speed\_limit\_mph & 22274 & 0.00 & 14.69 & 1.22 & 10 & 15.00 & 15.00 &
+15.00 & 15.0 & ▁▁▁▁▇ \\
+us\_congressional\_district & 234 & 0.99 & 5.69 & 21.06 & 1 & 2.00 &
+5.00 & 8.00 & 910.0 & ▇▁▁▁▁ \\
+state\_legislative\_district & 227 & 0.99 & 1828.18 & 220409.61 & 1 &
+10.00 & 19.00 & 39.00 & 32364346.0 & ▇▁▁▁▁ \\
+year\_constructed & 22297 & 0.00 & 2015.66 & 19.03 & 1900 & 2015.00 &
+2020.00 & 2022.00 & 2023.0 & ▁▁▁▁▇ \\
+shape\_length & 1 & 1.00 & 1582.14 & 7017.69 & 0 & 86.08 & 280.38 &
+1041.95 & 614606.5 & ▇▁▁▁▁ \\
+\end{longtable}
+}
+
+\section{── 2. SHARED BASE CLEANING
+───────────────────────────────────────────────────}\label{shared-base-cleaning}
+
+\section{}\label{section-8}
+
+\section{Rules applied here affect every sub-dataset
+equally:}\label{rules-applied-here-affect-every-sub-dataset-equally}
+
+\section{a) Trim whitespace in all character
+columns}\label{a-trim-whitespace-in-all-character-columns}
+
+\section{b) Normalize placeholder strings to
+NA}\label{b-normalize-placeholder-strings-to-na}
+
+\section{c) Keep only active / existing trail
+segments}\label{c-keep-only-active-existing-trail-segments}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{trails\_base }\OtherTok{\textless{}{-}}\NormalTok{ trails }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# whitespace}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), str\_squish)) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# Blank / placeholder {-}\textgreater{} NA}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{na\_if}\NormalTok{(., }\StringTok{""}\NormalTok{))) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{na\_if}\NormalTok{(., }\StringTok{"N/A"}\NormalTok{))) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{na\_if}\NormalTok{(., }\StringTok{"n/a"}\NormalTok{))) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{na\_if}\NormalTok{(., }\StringTok{"None"}\NormalTok{))) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{na\_if}\NormalTok{(., }\StringTok{"Unknown"}\NormalTok{))) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{na\_if}\NormalTok{(., }\StringTok{"Not Specified"}\NormalTok{))) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# Active trails only (remove proposed / decommissioned / closed)}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(trail\_status) }\SpecialCharTok{|}
+           \FunctionTok{str\_to\_lower}\NormalTok{(trail\_status) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"existing"}\NormalTok{, }\StringTok{"open"}\NormalTok{))}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Base after global clean:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(trails\_base), }\StringTok{"rows}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Base after global clean: 22303 rows
+\end{verbatim}
+
+\section{=============================================================================}\label{section-9}
+
+\section{SUB-DATASET 1 --- COMPARATIVE}\label{sub-dataset-1-comparative}
+
+\section{Question: How do trail surface types compare across primary use
+categories}\label{question-how-do-trail-surface-types-compare-across-primary-use-categories}
+
+\section{in terms of average segment length and trail
+width?}\label{in-terms-of-average-segment-length-and-trail-width}
+
+\section{}\label{section-10}
+
+\section{Variables:}\label{variables}
+
+\section{objectid --- unique row ID}\label{objectid-unique-row-id}
+
+\section{trail\_name --- for reference /
+labeling}\label{trail_name-for-reference-labeling}
+
+\section{surface\_cat --- derived: broad surface group (Paved, Gravel,
+etc.)}\label{surface_cat-derived-broad-surface-group-paved-gravel-etc.}
+
+\section{use\_cat --- derived: broad primary use group (Hiking, Biking,
+etc.)}\label{use_cat-derived-broad-primary-use-group-hiking-biking-etc.}
+
+\section{segment\_length\_miles --- continuous outcome variable (length
+comparison)}\label{segment_length_miles-continuous-outcome-variable-length-comparison}
+
+\section{trail\_width --- continuous outcome variable (width
+comparison)}\label{trail_width-continuous-outcome-variable-width-comparison}
+
+\section{=============================================================================}\label{section-11}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_q1 }\OtherTok{\textless{}{-}}\NormalTok{ trails\_base }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 1. Keep rows with all four required raw variables}
+  \FunctionTok{filter}\NormalTok{(}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(trail\_surface),}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(primary\_use),}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(segment\_length\_miles),}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(trail\_width)}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 2. Remove physically impossible / extreme lengths}
+  \CommentTok{\#    negative length ({-}1.0 min in raw) = data entry error}
+  \CommentTok{\#    \textgreater{} 50 miles = almost certainly a cumulative route total, not one segment}
+  \FunctionTok{filter}\NormalTok{(segment\_length\_miles }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, segment\_length\_miles }\SpecialCharTok{\textless{}=} \DecValTok{50}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 3. Remove zero{-}width trails (unrecorded, not a real trail width)}
+  \FunctionTok{filter}\NormalTok{(trail\_width }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 4. Collapse trail\_surface into surface\_cat (6 broad groups)}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{surface\_cat =} \FunctionTok{case\_when}\NormalTok{(}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_surface), }\StringTok{"paved|asphalt|concrete"}\NormalTok{)    }\SpecialCharTok{\textasciitilde{}} \StringTok{"Paved"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_surface), }\StringTok{"gravel|crushed"}\NormalTok{)            }\SpecialCharTok{\textasciitilde{}} \StringTok{"Gravel/Crushed"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_surface), }\StringTok{"native|dirt|natural|earth"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Native/Dirt"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_surface), }\StringTok{"wood|boardwalk"}\NormalTok{)            }\SpecialCharTok{\textasciitilde{}} \StringTok{"Wood/Boardwalk"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_surface), }\StringTok{"snow|ice"}\NormalTok{)                  }\SpecialCharTok{\textasciitilde{}} \StringTok{"Snow/Ice"}\NormalTok{,}
+    \ConstantTok{TRUE}                                                                  \SpecialCharTok{\textasciitilde{}} \StringTok{"Other"}
+\NormalTok{  )) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 5. Collapse primary\_use into use\_cat (6 broad groups)}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{use\_cat =} \FunctionTok{case\_when}\NormalTok{(}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(primary\_use), }\StringTok{"hik|walk|foot"}\NormalTok{)               }\SpecialCharTok{\textasciitilde{}} \StringTok{"Hiking/Walking"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(primary\_use), }\StringTok{"bik|cycl|mountain bike"}\NormalTok{)      }\SpecialCharTok{\textasciitilde{}} \StringTok{"Biking"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(primary\_use), }\StringTok{"atv|ohv|motoriz|4wd|jeep"}\NormalTok{)    }\SpecialCharTok{\textasciitilde{}} \StringTok{"Motorized"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(primary\_use), }\StringTok{"horse|equestrian|pack"}\NormalTok{)       }\SpecialCharTok{\textasciitilde{}} \StringTok{"Equestrian"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(primary\_use), }\StringTok{"ski|snow|snowshoe"}\NormalTok{)           }\SpecialCharTok{\textasciitilde{}} \StringTok{"Winter Use"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(primary\_use), }\StringTok{"water|canoe|kayak"}\NormalTok{)           }\SpecialCharTok{\textasciitilde{}} \StringTok{"Water"}\NormalTok{,}
+    \ConstantTok{TRUE}                                                                  \SpecialCharTok{\textasciitilde{}} \StringTok{"Other/Multi"}
+\NormalTok{  )) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 6. Keep only the 6 variables needed for Q1}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    objectid,}
+\NormalTok{    trail\_name,}
+\NormalTok{    surface\_cat,            }\CommentTok{\# grouping variable (x{-}axis / facet)}
+\NormalTok{    use\_cat,                }\CommentTok{\# grouping variable (color / facet)}
+\NormalTok{    segment\_length\_miles,   }\CommentTok{\# outcome 1}
+\NormalTok{    trail\_width             }\CommentTok{\# outcome 2}
+\NormalTok{  )}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}{-} df\_q1 (Comparative) {-}{-}}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## -- df_q1 (Comparative) --
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Rows:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q1), }\StringTok{"| Cols:"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q1), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 2087 | Cols: 6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Columns:"}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\FunctionTok{names}\NormalTok{(df\_q1), }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Columns: objectid, trail_name, surface_cat, use_cat, segment_length_miles, trail_width
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q1, surface\_cat) }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     surface_cat    n    percent
+##  Gravel/Crushed   59 0.02827024
+##     Native/Dirt  639 0.30618112
+##           Other 1032 0.49448970
+##           Paved  297 0.14230954
+##  Wood/Boardwalk   60 0.02874940
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q1, use\_cat)     }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         use_cat    n      percent
+##          Biking    7 0.0033540968
+##  Hiking/Walking 2035 0.9750838524
+##       Motorized    1 0.0004791567
+##     Other/Multi   44 0.0210828941
+\end{verbatim}
+
+\section{=============================================================================}\label{section-12}
+
+\section{SUB-DATASET 2 --- CORRELATION}\label{sub-dataset-2-correlation}
+
+\section{Question: Does trail width correlate with the number of
+permitted use
+types?}\label{question-does-trail-width-correlate-with-the-number-of-permitted-use-types}
+
+\section{}\label{section-13}
+
+\section{Variables:}\label{variables-1}
+
+\section{objectid --- unique row ID}\label{objectid-unique-row-id-1}
+
+\section{trail\_name --- for reference}\label{trail_name-for-reference}
+
+\section{trail\_width --- continuous predictor
+(x-axis)}\label{trail_width-continuous-predictor-x-axis}
+
+\section{num\_uses --- derived: count of permitted use types
+(y-axis)}\label{num_uses-derived-count-of-permitted-use-types-y-axis}
+
+\section{motor\_type --- derived: Motorized Only / Non-Motorized Only /
+Mixed}\label{motor_type-derived-motorized-only-non-motorized-only-mixed}
+
+\section{{[}13 use flags{]} --- binary 0/1 columns kept for per-use
+breakdown
+charts}\label{use-flags-binary-01-columns-kept-for-per-use-breakdown-charts}
+
+\section{=============================================================================}\label{section-14}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# All 13 use{-}type columns present in the raw data (raw values: "Yes" / "No" / NA)}
+\NormalTok{use\_cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"hiking\_walking"}\NormalTok{, }\StringTok{"bicycle"}\NormalTok{, }\StringTok{"e\_bike"}\NormalTok{,}
+  \StringTok{"x4wd"}\NormalTok{, }\StringTok{"atv"}\NormalTok{, }\StringTok{"motorcycle"}\NormalTok{,}
+  \StringTok{"pack\_and\_saddle"}\NormalTok{,}
+  \StringTok{"motorized\_watercraft"}\NormalTok{, }\StringTok{"non\_motorized\_watercraft"}\NormalTok{,}
+  \StringTok{"cross\_country\_ski"}\NormalTok{, }\StringTok{"snowmobile"}\NormalTok{, }\StringTok{"snowshoe"}\NormalTok{, }\StringTok{"dog\_sled"}
+\NormalTok{)}
+
+\NormalTok{df\_q2 }\OtherTok{\textless{}{-}}\NormalTok{ trails\_base }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 1. Need a valid, non{-}zero trail width}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(trail\_width), trail\_width }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 2. Binarize all use{-}type columns: "Yes" = 1, everything else = 0}
+  \CommentTok{\#    NA is treated as 0 (not recorded = not permitted for this analysis)}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}
+    \FunctionTok{all\_of}\NormalTok{(use\_cols),}
+    \SpecialCharTok{\textasciitilde{}} \FunctionTok{if\_else}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(.) }\SpecialCharTok{==} \StringTok{"yes"}\NormalTok{, }\DecValTok{1}\DataTypeTok{L}\NormalTok{, }\DecValTok{0}\DataTypeTok{L}\NormalTok{, }\AttributeTok{missing =} \DecValTok{0}\DataTypeTok{L}\NormalTok{)}
+\NormalTok{  )) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 3. Derive num\_uses = total number of permitted use types per segment}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{num\_uses =} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(use\_cols)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 4. Drop segments with zero uses recorded (nothing to correlate against)}
+  \FunctionTok{filter}\NormalTok{(num\_uses }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 5. Classify each segment as Motorized / Non{-}Motorized / Mixed}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{has\_motorized    =}\NormalTok{ (x4wd }\SpecialCharTok{+}\NormalTok{ atv }\SpecialCharTok{+}\NormalTok{ motorcycle }\SpecialCharTok{+}\NormalTok{ snowmobile) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{,}
+    \AttributeTok{has\_nonmotorized =}\NormalTok{ (hiking\_walking }\SpecialCharTok{+}\NormalTok{ bicycle }\SpecialCharTok{+}\NormalTok{ cross\_country\_ski }\SpecialCharTok{+}
+\NormalTok{                          snowshoe }\SpecialCharTok{+}\NormalTok{ pack\_and\_saddle) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{,}
+    \AttributeTok{motor\_type =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      has\_motorized }\SpecialCharTok{\&} \SpecialCharTok{!}\NormalTok{has\_nonmotorized  }\SpecialCharTok{\textasciitilde{}} \StringTok{"Motorized Only"}\NormalTok{,}
+      \SpecialCharTok{!}\NormalTok{has\_motorized }\SpecialCharTok{\&}\NormalTok{ has\_nonmotorized  }\SpecialCharTok{\textasciitilde{}} \StringTok{"Non{-}Motorized Only"}\NormalTok{,}
+\NormalTok{      has\_motorized }\SpecialCharTok{\&}\NormalTok{ has\_nonmotorized   }\SpecialCharTok{\textasciitilde{}} \StringTok{"Mixed"}\NormalTok{,}
+      \ConstantTok{TRUE}                               \SpecialCharTok{\textasciitilde{}} \StringTok{"Unclassified"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 6. Keep only the variables needed for Q2}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    objectid,}
+\NormalTok{    trail\_name,}
+\NormalTok{    trail\_width,          }\CommentTok{\# continuous predictor}
+\NormalTok{    num\_uses,             }\CommentTok{\# derived count — response variable}
+\NormalTok{    motor\_type,           }\CommentTok{\# color / facet grouping}
+    \FunctionTok{all\_of}\NormalTok{(use\_cols)      }\CommentTok{\# individual flags for breakdown analysis}
+\NormalTok{  )}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}{-} df\_q2 (Correlation) {-}{-}}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## -- df_q2 (Correlation) --
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Rows:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q2), }\StringTok{"| Cols:"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q2), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 2516 | Cols: 18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Columns:"}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\FunctionTok{names}\NormalTok{(df\_q2), }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Columns: objectid, trail_name, trail_width, num_uses, motor_type, hiking_walking, bicycle, e_bike, x4wd, atv, motorcycle, pack_and_saddle, motorized_watercraft, non_motorized_watercraft, cross_country_ski, snowmobile, snowshoe, dog_sled
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(df\_q2}\SpecialCharTok{$}\NormalTok{trail\_width) }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   5.000   8.000   8.353  10.000  35.000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(df\_q2}\SpecialCharTok{$}\NormalTok{num\_uses)    }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    1.00    1.00    1.38    2.00    3.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q2, motor\_type)   }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          motor_type    n      percent
+##      Motorized Only    1 0.0003974563
+##  Non-Motorized Only 2515 0.9996025437
+\end{verbatim}
+
+\section{=============================================================================}\label{section-15}
+
+\section{SUB-DATASET 3 --- GEOGRAPHIC}\label{sub-dataset-3-geographic}
+
+\section{Question: Which WA counties have the highest density of
+motorized
+vs.}\label{question-which-wa-counties-have-the-highest-density-of-motorized-vs.}
+
+\section{non-motorized trails, and are motorized trails
+concentrated}\label{non-motorized-trails-and-are-motorized-trails-concentrated}
+
+\section{in Eastern WA?}\label{in-eastern-wa}
+
+\section{}\label{section-16}
+
+\section{Variables:}\label{variables-2}
+
+\section{objectid --- unique row ID}\label{objectid-unique-row-id-2}
+
+\section{trail\_name --- for
+reference}\label{trail_name-for-reference-1}
+
+\section{county --- cleaned county name (geographic grouping
+unit)}\label{county-cleaned-county-name-geographic-grouping-unit}
+
+\section{region --- derived: ``Eastern WA'' or ``Western
+WA''}\label{region-derived-eastern-wa-or-western-wa}
+
+\section{is\_motorized --- derived: ``Motorized'' or
+``Non-Motorized''}\label{is_motorized-derived-motorized-or-non-motorized}
+
+\section{segment\_length\_miles --- for aggregating total trail miles
+per
+county}\label{segment_length_miles-for-aggregating-total-trail-miles-per-county}
+
+\section{=============================================================================}\label{section-17}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 20 counties east of the Cascades}
+\NormalTok{eastern\_wa\_counties }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"Adams"}\NormalTok{, }\StringTok{"Asotin"}\NormalTok{, }\StringTok{"Benton"}\NormalTok{, }\StringTok{"Chelan"}\NormalTok{, }\StringTok{"Columbia"}\NormalTok{, }\StringTok{"Douglas"}\NormalTok{,}
+  \StringTok{"Ferry"}\NormalTok{, }\StringTok{"Franklin"}\NormalTok{, }\StringTok{"Garfield"}\NormalTok{, }\StringTok{"Grant"}\NormalTok{, }\StringTok{"Kittitas"}\NormalTok{, }\StringTok{"Klickitat"}\NormalTok{,}
+  \StringTok{"Lincoln"}\NormalTok{, }\StringTok{"Okanogan"}\NormalTok{, }\StringTok{"Pend Oreille"}\NormalTok{, }\StringTok{"Spokane"}\NormalTok{, }\StringTok{"Stevens"}\NormalTok{,}
+  \StringTok{"Walla Walla"}\NormalTok{, }\StringTok{"Whitman"}\NormalTok{, }\StringTok{"Yakima"}
+\NormalTok{)}
+
+\NormalTok{df\_q3 }\OtherTok{\textless{}{-}}\NormalTok{ trails\_base }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 1. Need county and a valid segment length}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(county), }\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(segment\_length\_miles)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(segment\_length\_miles }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, segment\_length\_miles }\SpecialCharTok{\textless{}=} \DecValTok{50}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 2. Standardize county names}
+  \CommentTok{\#    Remove trailing "County" suffix, title{-}case, trim spaces}
+  \CommentTok{\#    e.g. "king county" {-}\textgreater{} "King",  "PIERCE COUNTY" {-}\textgreater{} "Pierce"}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{county =} \FunctionTok{str\_remove}\NormalTok{(county, }\FunctionTok{regex}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{s*county$"}\NormalTok{, }\AttributeTok{ignore\_case =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+           \FunctionTok{str\_to\_title}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+           \FunctionTok{str\_squish}\NormalTok{()) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 3. Binarize use columns to classify motorized vs. non{-}motorized}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}
+    \FunctionTok{all\_of}\NormalTok{(use\_cols),}
+    \SpecialCharTok{\textasciitilde{}} \FunctionTok{if\_else}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(.) }\SpecialCharTok{==} \StringTok{"yes"}\NormalTok{, }\DecValTok{1}\DataTypeTok{L}\NormalTok{, }\DecValTok{0}\DataTypeTok{L}\NormalTok{, }\AttributeTok{missing =} \DecValTok{0}\DataTypeTok{L}\NormalTok{)}
+\NormalTok{  )) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{is\_motorized =} \FunctionTok{if\_else}\NormalTok{(}
+\NormalTok{      (atv }\SpecialCharTok{+}\NormalTok{ motorcycle }\SpecialCharTok{+}\NormalTok{ x4wd }\SpecialCharTok{+}\NormalTok{ snowmobile) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{,}
+      \StringTok{"Motorized"}\NormalTok{,}
+      \StringTok{"Non{-}Motorized"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 4. Classify Eastern vs. Western WA based on county}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{region =} \FunctionTok{if\_else}\NormalTok{(county }\SpecialCharTok{\%in\%}\NormalTok{ eastern\_wa\_counties,}
+                          \StringTok{"Eastern WA"}\NormalTok{, }\StringTok{"Western WA"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 5. Keep only the 6 variables needed for Q3}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    objectid,}
+\NormalTok{    trail\_name,}
+\NormalTok{    county,               }\CommentTok{\# geographic grouping unit}
+\NormalTok{    region,               }\CommentTok{\# Eastern WA / Western WA}
+\NormalTok{    is\_motorized,         }\CommentTok{\# Motorized / Non{-}Motorized}
+\NormalTok{    segment\_length\_miles  }\CommentTok{\# for total{-}miles{-}per{-}county aggregation}
+\NormalTok{  )}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}{-} df\_q3 (Geographic) {-}{-}}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## -- df_q3 (Geographic) --
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Rows:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q3), }\StringTok{"| Cols:"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q3), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 22003 | Cols: 6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Columns:"}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\FunctionTok{names}\NormalTok{(df\_q3), }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Columns: objectid, trail_name, county, region, is_motorized, segment_length_miles
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Counties represented:"}\NormalTok{, }\FunctionTok{n\_distinct}\NormalTok{(df\_q3}\SpecialCharTok{$}\NormalTok{county), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Counties represented: 90
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q3, region, is\_motorized) }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      region Motorized Non-Motorized
+##  Eastern WA       800          4068
+##  Western WA      1193         15942
+\end{verbatim}
+
+\section{=============================================================================}\label{section-18}
+
+\section{SUB-DATASET 4 --- TIME / TREND}\label{sub-dataset-4-time-trend}
+
+\section{Question: How has trail construction volume changed over time
+(by
+decade),}\label{question-how-has-trail-construction-volume-changed-over-time-by-decade}
+
+\section{and which trail types or agencies drove recent
+growth?}\label{and-which-trail-types-or-agencies-drove-recent-growth}
+
+\section{}\label{section-19}
+
+\section{Variables:}\label{variables-3}
+
+\section{objectid --- unique row ID}\label{objectid-unique-row-id-3}
+
+\section{trail\_name --- for
+reference}\label{trail_name-for-reference-2}
+
+\section{year\_constructed --- raw year (continuous, for annual trend
+line)}\label{year_constructed-raw-year-continuous-for-annual-trend-line}
+
+\section{decade --- derived: floored to decade (1990, 2000, 2010
+\ldots)}\label{decade-derived-floored-to-decade-1990-2000-2010}
+
+\section{era --- derived: labeled period factor (Pre-1970, 1990s,
+etc.)}\label{era-derived-labeled-period-factor-pre-1970-1990s-etc.}
+
+\section{trail\_type\_cat --- derived: broad trail type
+group}\label{trail_type_cat-derived-broad-trail-type-group}
+
+\section{agency\_clean --- derived: top agencies kept; rare ones
+-\textgreater{} ``Other
+Agency''}\label{agency_clean-derived-top-agencies-kept-rare-ones---other-agency}
+
+\section{segment\_length\_miles --- for total miles constructed per
+period}\label{segment_length_miles-for-total-miles-constructed-per-period}
+
+\section{=============================================================================}\label{section-20}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_q4 }\OtherTok{\textless{}{-}}\NormalTok{ trails\_base }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 1. Keep only rows with a recorded construction year}
+  \CommentTok{\#    Note: \textasciitilde{}22,297 of 22,338 rows are NA here — this sub{-}dataset will be small}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(year\_constructed)) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 2. Remove implausible years (dataset spans 1900{-}2023 in raw summary)}
+  \FunctionTok{filter}\NormalTok{(year\_constructed }\SpecialCharTok{\textgreater{}=} \DecValTok{1900}\NormalTok{, year\_constructed }\SpecialCharTok{\textless{}=} \DecValTok{2025}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 3. Remove invalid segment lengths}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(segment\_length\_miles),}
+\NormalTok{         segment\_length\_miles }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{,}
+\NormalTok{         segment\_length\_miles }\SpecialCharTok{\textless{}=} \DecValTok{50}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 4. Derive decade and era period labels}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{decade =}\NormalTok{ (year\_constructed }\SpecialCharTok{\%/\%} \DecValTok{10}\NormalTok{) }\SpecialCharTok{*} \DecValTok{10}\NormalTok{,}
+    \AttributeTok{era    =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      year\_constructed }\SpecialCharTok{\textless{}} \DecValTok{1970} \SpecialCharTok{\textasciitilde{}} \StringTok{"Pre{-}1970"}\NormalTok{,}
+\NormalTok{      year\_constructed }\SpecialCharTok{\textless{}} \DecValTok{1990} \SpecialCharTok{\textasciitilde{}} \StringTok{"1970s{-}80s"}\NormalTok{,}
+\NormalTok{      year\_constructed }\SpecialCharTok{\textless{}} \DecValTok{2000} \SpecialCharTok{\textasciitilde{}} \StringTok{"1990s"}\NormalTok{,}
+\NormalTok{      year\_constructed }\SpecialCharTok{\textless{}} \DecValTok{2010} \SpecialCharTok{\textasciitilde{}} \StringTok{"2000s"}\NormalTok{,}
+\NormalTok{      year\_constructed }\SpecialCharTok{\textless{}} \DecValTok{2020} \SpecialCharTok{\textasciitilde{}} \StringTok{"2010s"}\NormalTok{,}
+      \ConstantTok{TRUE}                    \SpecialCharTok{\textasciitilde{}} \StringTok{"2020s"}
+\NormalTok{    ) }\SpecialCharTok{|\textgreater{}} \FunctionTok{factor}\NormalTok{(}\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Pre{-}1970"}\NormalTok{, }\StringTok{"1970s{-}80s"}\NormalTok{, }\StringTok{"1990s"}\NormalTok{,}
+                           \StringTok{"2000s"}\NormalTok{, }\StringTok{"2010s"}\NormalTok{, }\StringTok{"2020s"}\NormalTok{))}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 5. Collapse trail\_type into trail\_type\_cat (7 broad groups)}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{trail\_type\_cat =} \FunctionTok{case\_when}\NormalTok{(}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"hik|foot|pedestrian|walk"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Hiking/Pedestrian"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"multi|shared|paved"}\NormalTok{)       }\SpecialCharTok{\textasciitilde{}} \StringTok{"Multi{-}Use Paved"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"mtn|mountain bike|bike"}\NormalTok{)   }\SpecialCharTok{\textasciitilde{}} \StringTok{"Mountain Bike"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"motoriz|ohv|atv|ohm"}\NormalTok{)      }\SpecialCharTok{\textasciitilde{}} \StringTok{"Motorized OHV"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"equestrian|horse|pack"}\NormalTok{)    }\SpecialCharTok{\textasciitilde{}} \StringTok{"Equestrian"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"winter|snow|ski"}\NormalTok{)          }\SpecialCharTok{\textasciitilde{}} \StringTok{"Winter"}\NormalTok{,}
+    \FunctionTok{str\_detect}\NormalTok{(}\FunctionTok{str\_to\_lower}\NormalTok{(trail\_type), }\StringTok{"water"}\NormalTok{)                    }\SpecialCharTok{\textasciitilde{}} \StringTok{"Water"}\NormalTok{,}
+    \ConstantTok{TRUE}                                                              \SpecialCharTok{\textasciitilde{}} \StringTok{"Other/Unknown"}
+\NormalTok{  )) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 6. Collapse rare management agencies into "Other Agency"}
+  \CommentTok{\#    Threshold: keep agencies with \textgreater{}= 30 segments in this filtered dataset}
+  \CommentTok{\#    This preserves the top \textasciitilde{}5{-}8 agencies for a readable trend chart}
+  \FunctionTok{add\_count}\NormalTok{(management\_agency, }\AttributeTok{name =} \StringTok{"n\_agency"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{agency\_clean =} \FunctionTok{if\_else}\NormalTok{(n\_agency }\SpecialCharTok{\textgreater{}=} \DecValTok{30}\NormalTok{,}
+\NormalTok{                                management\_agency,}
+                                \StringTok{"Other Agency"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{n\_agency) }\SpecialCharTok{|\textgreater{}}
+  
+  \CommentTok{\# 7. Keep only the 8 variables needed for Q4}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    objectid,}
+\NormalTok{    trail\_name,}
+\NormalTok{    year\_constructed,      }\CommentTok{\# raw year: for continuous trend line}
+\NormalTok{    decade,                }\CommentTok{\# grouped: bar / area chart by decade}
+\NormalTok{    era,                   }\CommentTok{\# ordered factor: readable axis labels}
+\NormalTok{    trail\_type\_cat,        }\CommentTok{\# color / facet: what type was being built?}
+\NormalTok{    agency\_clean,          }\CommentTok{\# color / facet: who was building?}
+\NormalTok{    segment\_length\_miles   }\CommentTok{\# for total miles constructed per period}
+\NormalTok{  )}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}{-} df\_q4 (Time/Trend) {-}{-}}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## -- df_q4 (Time/Trend) --
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Rows:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q4), }\StringTok{"| Cols:"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q4), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 40 | Cols: 8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Columns:"}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\FunctionTok{names}\NormalTok{(df\_q4), }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Columns: objectid, trail_name, year_constructed, decade, era, trail_type_cat, agency_clean, segment_length_miles
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q4, era)            }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        era  n percent
+##   Pre-1970  1   0.025
+##  1970s-80s  0   0.000
+##      1990s  0   0.000
+##      2000s  1   0.025
+##      2010s 15   0.375
+##      2020s 23   0.575
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q4, trail\_type\_cat) }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  trail_type_cat  n percent
+##   Other/Unknown 40       1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(df\_q4, agency\_clean)   }\SpecialCharTok{|\textgreater{}} \FunctionTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         agency_clean  n percent
+##  City of Bonney Lake 30    0.75
+##         Other Agency 10    0.25
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{view}\NormalTok{(df\_q1)}
+\FunctionTok{view}\NormalTok{(df\_q2)}
+\FunctionTok{view}\NormalTok{(df\_q3)}
+\FunctionTok{view}\NormalTok{(df\_q4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ── 4. FINAL SUMMARY ──────────────────────────────────────────────────────────}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{=== CLEANING SUMMARY ===}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## === CLEANING SUMMARY ===
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Raw rows              :"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(trails\_raw), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Raw rows              : 22338
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"After base cleaning   :"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(trails\_base), }\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## After base cleaning   : 22303
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"df\_q1  Comparative    :"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q1), }\StringTok{"rows x"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q1), }\StringTok{"vars}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## df_q1  Comparative    : 2087 rows x 6 vars
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"df\_q2  Correlation    :"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q2), }\StringTok{"rows x"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q2), }\StringTok{"vars}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## df_q2  Correlation    : 2516 rows x 18 vars
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"df\_q3  Geographic     :"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q3), }\StringTok{"rows x"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q3), }\StringTok{"vars}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## df_q3  Geographic     : 22003 rows x 6 vars
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"df\_q4  Time/Trend     :"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(df\_q4), }\StringTok{"rows x"}\NormalTok{, }\FunctionTok{ncol}\NormalTok{(df\_q4), }\StringTok{"vars}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## df_q4  Time/Trend     : 40 rows x 8 vars
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}
+\StringTok{Key cleaning decisions:}
+\StringTok{  * segment\_length\_miles \textless{}= 0 or \textgreater{} 50 dropped (errors / cumulative totals)}
+\StringTok{  * trail\_width = 0 dropped (physically impossible)}
+\StringTok{  * year\_constructed outside 1900{-}2025 dropped (implausible)}
+\StringTok{  * Blank / \textquotesingle{}Unknown\textquotesingle{} / \textquotesingle{}N/A\textquotesingle{} strings normalized to NA (all char cols)}
+\StringTok{  * trail\_status filtered to active / existing trails only}
+\StringTok{  * Use{-}type Yes/No columns binarized (NA treated as 0 = not permitted)}
+\StringTok{  * County names: \textquotesingle{}County\textquotesingle{} suffix stripped, title{-}cased, whitespace trimmed}
+\StringTok{  * Surface / use / trail\_type collapsed to broad readable categories}
+\StringTok{  * Agencies with \textless{} 30 segments in Q4 collapsed to \textquotesingle{}Other Agency\textquotesingle{}}
+\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Key cleaning decisions:
+##   * segment_length_miles <= 0 or > 50 dropped (errors / cumulative totals)
+##   * trail_width = 0 dropped (physically impossible)
+##   * year_constructed outside 1900-2025 dropped (implausible)
+##   * Blank / 'Unknown' / 'N/A' strings normalized to NA (all char cols)
+##   * trail_status filtered to active / existing trails only
+##   * Use-type Yes/No columns binarized (NA treated as 0 = not permitted)
+##   * County names: 'County' suffix stripped, title-cased, whitespace trimmed
+##   * Surface / use / trail_type collapsed to broad readable categories
+##   * Agencies with < 30 segments in Q4 collapsed to 'Other Agency'
+\end{verbatim}
+
+\end{document}
